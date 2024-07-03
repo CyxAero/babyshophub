@@ -1,0 +1,16 @@
+**/build/
+**/.dart_tool/
+**/.idea/
+**/.vscode/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/.DS_Store
+babyshophub_user/android/.gradle/
+babyshophub_user/android/app/google-services.json
+babyshophub_user/ios/Runner/GoogleService-Info.plist
+babyshophub_admin/android/.gradle/
+babyshophub_admin/android/app/google-services.json
+babyshophub_admin/ios/Runner/GoogleService-Info.plist
+.firebase/
+**/.firebase/
