@@ -1,16 +1,42 @@
+# Flutter/Dart
+*.dart_tool/
+*.packages
+.packages
+*.flutter-plugins
+*.flutter-plugins-dependencies
+*.flutter-plugins-dependencies
+
+# Generated files
+*.symlinks/
+*.ios/
+*.android/
+*.dart_tool/
+*.flutter-plugins
+*.flutter-plugins-dependencies
+*.flutter-version
+*.package_config.json
+
+# MacOS
+.DS_Store
+
+# Files and directories created by pub
+build/
+pubspec.lock
+
+# Intellij
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+.history/
+
+# Google Service files (you might have them if you're using Firebase)
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+# Flutter build output
+build/
+
+# Others
 **/build/
-**/.dart_tool/
-**/.idea/
-**/.vscode/
-**/.flutter-plugins
-**/.flutter-plugins-dependencies
-**/.packages
-**/.DS_Store
-babyshophub_user/android/.gradle/
-babyshophub_user/android/app/google-services.json
-babyshophub_user/ios/Runner/GoogleService-Info.plist
-babyshophub_admin/android/.gradle/
-babyshophub_admin/android/app/google-services.json
-babyshophub_admin/ios/Runner/GoogleService-Info.plist
-.firebase/
-**/.firebase/
