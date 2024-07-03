@@ -74,13 +74,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         );
-        // Navigator.of(context).pushReplacement(
-        //   MaterialPageRoute(
-        //     builder: (context) => MainApp(
-        //       user: user,
-        //     ),
-        //   ),
-        // );
 
         CustomSnackBar.showCustomSnackbar(
           context,
@@ -114,7 +107,6 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-            // padding: const EdgeInsets.fromLTRB(24, 20, 24, 40),
             child: Column(
               children: [
                 _buildTitleSection(context),

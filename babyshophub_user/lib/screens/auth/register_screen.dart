@@ -233,7 +233,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           _emailController.text,
                           _passwordController.text,
                           _usernameController.text,
-                          true,
+                          false,
                         );
 
                         setState(() {
@@ -251,12 +251,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ),
                           );
-                          // Navigator.of(context)
-                          //     .pushReplacement(MaterialPageRoute(
-                          //   builder: (context) => MainApp(
-                          //     user: user,
-                          //   ),
-                          // ));
 
                           CustomSnackBar.showCustomSnackbar(
                             context,
@@ -351,11 +345,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                   );
-                  // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  //   builder: (context) => MainApp(
-                  //     user: user,
-                  //   ),
-                  // ));
                 } else {
                   CustomSnackBar.showCustomSnackbar(
                     context,
