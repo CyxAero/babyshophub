@@ -1,7 +1,7 @@
+import 'dart:io';
+
 import 'package:babyshophub_admin/firebase_options.dart';
-import 'package:babyshophub_admin/models/user_model.dart';
-import 'package:babyshophub_admin/screens/dashboard/main_app.dart';
-import 'package:babyshophub_admin/screens/getting_started.dart';
+import 'package:babyshophub_admin/screens/auth/auth_check.dart';
 import 'package:babyshophub_admin/services/auth_service.dart';
 import 'package:babyshophub_admin/theme/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,7 +27,7 @@ Future<void> main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   // *Loading .env file
-  await dotenv.load(fileName: '../.env');
+  await dotenv.load(fileName: '.env');
 
   // ?Connecting to firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -50,30 +50,13 @@ class MyApp extends StatelessWidget {
         Provider<AuthService>(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
-      child: Consumer2<AuthService, ThemeProvider>(
-        builder: (context, authService, themeProvider, _) {
-          return FutureBuilder(
-            future: authService.currentUser(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasData) {
-                UserModel user = snapshot.data!;
-                return MaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  title: 'BabyShopHub Admin',
-                  theme: themeProvider.themeData,
-                  home: MainApp(user: user), // Pass the user object
-                );
-              } else {
-                return MaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  title: 'BabyShopHub Admin',
-                  theme: themeProvider.themeData,
-                  home: const GettingStarted(),
-                );
-              }
-            },
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, _) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'BabyShopHub Admin',
+            theme: themeProvider.themeData,
+            home: const AuthCheck(),
           );
         },
       ),

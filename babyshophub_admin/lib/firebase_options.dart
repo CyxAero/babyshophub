@@ -51,19 +51,19 @@ class DefaultFirebaseOptions {
   }
 
   static final FirebaseOptions android = FirebaseOptions(
-    apiKey: dotenv.env["API_KEY"] ?? "",
-    appId: dotenv.env["ANDROID_APP_ID"] ?? "",
-    messagingSenderId: dotenv.env["MESSAGING_SENDER_ID"] ?? "",
-    projectId: dotenv.env["PROJECT_ID"] ?? "",
-    storageBucket: dotenv.env["STORAGE_BUCKET"] ?? "",
+    apiKey: dotenv.get("API_KEY"),
+    appId: dotenv.get("ANDROID_APP_ID"),
+    messagingSenderId: dotenv.get("MESSAGING_SENDER_ID"),
+    projectId: dotenv.get("PROJECT_ID"),
+    storageBucket: dotenv.get("STORAGE_BUCKET"),
   );
 
   static final FirebaseOptions ios = FirebaseOptions(
-    apiKey: dotenv.env["GOOGLE_API_KEY"] ?? "",
-    appId: dotenv.env["IOS_APP_ID"] ?? "",
-    messagingSenderId: dotenv.env["MESSAGING_SENDER_ID"] ?? "",
-    projectId: dotenv.env["PROJECT_ID"] ?? "",
-    storageBucket: dotenv.env["STORAGE_BUCKET"] ?? "",
-    iosBundleId: dotenv.env["IOS_BUNDLE_ID"] ?? "",
+    apiKey: dotenv.get("GOOGLE_API_KEY"),
+    appId: dotenv.get("IOS_APP_ID"),
+    messagingSenderId: dotenv.get("MESSAGING_SENDER_ID"),
+    projectId: dotenv.get("PROJECT_ID"),
+    storageBucket: dotenv.get("STORAGE_BUCKET"),
+    iosBundleId: dotenv.get("IOS_BUNDLE_ID"),
   );
 }

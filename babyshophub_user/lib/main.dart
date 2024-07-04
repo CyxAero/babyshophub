@@ -27,7 +27,7 @@ Future<void> main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   // *Loading .env file
-  await dotenv.load(fileName: '../.env');
+  await dotenv.load(fileName: '.env');
 
   // ?Connecting to firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

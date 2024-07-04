@@ -1,5 +1,7 @@
 import 'package:babyshophub_admin/models/user_model.dart';
+import 'package:babyshophub_admin/screens/settings/settings_page.dart';
 import 'package:babyshophub_admin/theme/theme_provider.dart';
+import 'package:babyshophub_admin/widgets/heading_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,39 +27,14 @@ class _MainAppState extends State<MainApp> {
       Orders(user: widget.user),
       Products(user: widget.user),
       Users(user: widget.user),
-      Settings(user: widget.user),
+      SettingsPage(user: widget.user),
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          "BabyShopHub Admin",
-          style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-          maxLines: 2,
-        ),
-        backgroundColor: Colors.transparent,
-        toolbarHeight: 150,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(4.0),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color:
-                      Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-                  width: 1.5,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+      appBar: const CustomAppBar(title: "BabyShopHub Admin", height: 150),
       body: pages[_currentPage],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
