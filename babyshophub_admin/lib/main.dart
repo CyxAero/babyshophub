@@ -7,6 +7,7 @@ import 'package:babyshophub_admin/theme/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -24,6 +25,9 @@ Future<void> main() async {
   ));
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+  // *Loading .env file
+  await dotenv.load(fileName: '../.env');
 
   // ?Connecting to firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

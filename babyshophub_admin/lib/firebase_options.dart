@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -49,20 +50,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC29CXh6zsfwLKzKULh-kMhfxaOvkPpe9s',
-    appId: '1:165972287104:android:ae7645031555a235741065',
-    messagingSenderId: '165972287104',
-    projectId: 'babyshophub-afe3b',
-    storageBucket: 'babyshophub-afe3b.appspot.com',
+  static final FirebaseOptions android = FirebaseOptions(
+    apiKey: dotenv.env["API_KEY"] ?? "",
+    appId: dotenv.env["ANDROID_APP_ID"] ?? "",
+    messagingSenderId: dotenv.env["MESSAGING_SENDER_ID"] ?? "",
+    projectId: dotenv.env["PROJECT_ID"] ?? "",
+    storageBucket: dotenv.env["STORAGE_BUCKET"] ?? "",
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD0lqqUcpLgDtiudCoE-4PGYMN88LRslKc',
-    appId: '1:165972287104:ios:b3e779b9c9631278741065',
-    messagingSenderId: '165972287104',
-    projectId: 'babyshophub-afe3b',
-    storageBucket: 'babyshophub-afe3b.appspot.com',
-    iosBundleId: 'com.example.babyshophubAdmin',
+  static final FirebaseOptions ios = FirebaseOptions(
+    apiKey: dotenv.env["GOOGLE_API_KEY"] ?? "",
+    appId: dotenv.env["IOS_APP_ID"] ?? "",
+    messagingSenderId: dotenv.env["MESSAGING_SENDER_ID"] ?? "",
+    projectId: dotenv.env["PROJECT_ID"] ?? "",
+    storageBucket: dotenv.env["STORAGE_BUCKET"] ?? "",
+    iosBundleId: dotenv.env["IOS_BUNDLE_ID"] ?? "",
   );
 }
