@@ -10,6 +10,7 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: const CustomAppBar(title: "BabyShopHub", height: 150),
       body: SingleChildScrollView(
         child: Padding(

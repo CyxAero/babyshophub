@@ -21,6 +21,7 @@ class _SettingsPageState extends State<SettingsPage> {
     bool isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: const CustomAppBar(title: "Settings", height: 150),
       body: SingleChildScrollView(
         child: Padding(

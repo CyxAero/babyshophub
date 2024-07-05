@@ -35,7 +35,6 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
       body: pages[_currentPage],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -51,6 +50,8 @@ class _MainAppState extends State<MainApp> {
           indicatorColor: Theme.of(context).colorScheme.primary,
           height: 100,
           selectedIndex: _currentPage,
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          animationDuration: const Duration(seconds: 1),
           onDestinationSelected: (index) {
             setState(() {
               _currentPage = index;
@@ -58,44 +59,31 @@ class _MainAppState extends State<MainApp> {
           },
           destinations: const [
             NavigationDestination(
-              icon: Icon(Icons.dashboard_customize_rounded),
+              icon: Icon(Icons.dashboard_outlined),
+              selectedIcon: Icon(Icons.dashboard_rounded),
               label: 'Dashboard',
             ),
             NavigationDestination(
-              icon: Icon(Icons.shopping_bag_rounded),
+              icon: Icon(Icons.shopping_bag_outlined),
+              selectedIcon: Icon(Icons.shopping_bag_rounded),
               label: 'Shop',
             ),
             NavigationDestination(
-              icon: Icon(Icons.shopping_cart_rounded),
+              icon: Icon(Icons.shopping_cart_outlined),
+              selectedIcon: Icon(Icons.shopping_cart_rounded),
               label: 'Cart',
             ),
             NavigationDestination(
-              icon: Icon(Icons.saved_search_rounded),
+              icon: Icon(Icons.saved_search_outlined),
+              selectedIcon: Icon(Icons.saved_search_rounded),
               label: 'Saved',
             ),
             NavigationDestination(
-              icon: Icon(Icons.settings_rounded),
+              icon: Icon(Icons.settings_outlined),
+              selectedIcon: Icon(Icons.settings_rounded),
               label: 'Settings',
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class Orders extends StatelessWidget {
-  final UserModel user;
-
-  const Orders({super.key, required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          "Orders",
-          style: Theme.of(context).textTheme.displayMedium,
         ),
       ),
     );
