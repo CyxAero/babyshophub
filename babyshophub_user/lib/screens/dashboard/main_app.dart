@@ -1,6 +1,9 @@
 import 'package:BabyShopHub/models/user_model.dart';
+import 'package:BabyShopHub/screens/cart/cart_page.dart';
 import 'package:BabyShopHub/screens/dashboard/dashboard_page.dart';
+import 'package:BabyShopHub/screens/saved/saved_products_page.dart';
 import 'package:BabyShopHub/screens/settings/settings_page.dart';
+import 'package:BabyShopHub/screens/shop/shop_page.dart';
 import 'package:flutter/material.dart';
 
 class MainApp extends StatefulWidget {
@@ -22,9 +25,9 @@ class _MainAppState extends State<MainApp> {
     super.initState();
     pages.addAll([
       DashboardPage(user: widget.user),
-      Orders(user: widget.user),
-      Products(user: widget.user),
-      Users(user: widget.user),
+      ShopPage(user: widget.user),
+      CartPage(user: widget.user),
+      SavedProductsPage(user: widget.user),
       SettingsPage(user: widget.user),
     ]);
   }
@@ -60,15 +63,15 @@ class _MainAppState extends State<MainApp> {
             ),
             NavigationDestination(
               icon: Icon(Icons.shopping_bag_rounded),
-              label: 'Orders',
+              label: 'Shop',
             ),
             NavigationDestination(
-              icon: Icon(Icons.shopping_bag_rounded),
-              label: 'Products',
+              icon: Icon(Icons.shopping_cart_rounded),
+              label: 'Cart',
             ),
             NavigationDestination(
-              icon: Icon(Icons.people_alt_rounded),
-              label: 'Users',
+              icon: Icon(Icons.saved_search_rounded),
+              label: 'Saved',
             ),
             NavigationDestination(
               icon: Icon(Icons.settings_rounded),
@@ -92,42 +95,6 @@ class Orders extends StatelessWidget {
       body: Center(
         child: Text(
           "Orders",
-          style: Theme.of(context).textTheme.displayMedium,
-        ),
-      ),
-    );
-  }
-}
-
-class Products extends StatelessWidget {
-  final UserModel user;
-
-  const Products({super.key, required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          "Products",
-          style: Theme.of(context).textTheme.displayMedium,
-        ),
-      ),
-    );
-  }
-}
-
-class Users extends StatelessWidget {
-  final UserModel user;
-
-  const Users({super.key, required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          "Users",
           style: Theme.of(context).textTheme.displayMedium,
         ),
       ),
