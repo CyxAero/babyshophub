@@ -1,7 +1,7 @@
-import 'package:babyshophub_admin/models/user_model.dart';
-import 'package:babyshophub_admin/theme/theme_extension.dart';
-import 'package:babyshophub_admin/theme/theme_provider.dart';
-import 'package:babyshophub_admin/widgets/heading_appbar.dart';
+import 'package:babyshophub_user/models/user_model.dart';
+import 'package:babyshophub_user/theme/theme_extension.dart';
+import 'package:babyshophub_user/theme/theme_provider.dart';
+import 'package:babyshophub_user/widgets/heading_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         Switch(
-                          activeColor: Theme.of(context).colorScheme.black2,
+                          activeColor: Theme.of(context).colorScheme.black1,
                           value: isDarkMode,
                           onChanged: (bool value) {
                             setState(() {

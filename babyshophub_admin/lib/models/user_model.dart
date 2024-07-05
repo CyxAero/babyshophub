@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
   String userId;
-  String name;
   String email;
   String? username; // Username attribute
   String? profileImage;
@@ -12,7 +11,6 @@ class UserModel {
 
   UserModel({
     required this.userId,
-    required this.name,
     required this.email,
     this.username,
     this.profileImage,
@@ -25,7 +23,6 @@ class UserModel {
     Map data = doc.data() as Map<String, dynamic>;
     return UserModel(
       userId: doc.id,
-      name: data['name'] ?? '',
       email: data['email'] ?? '',
       username: data['username'], // Fetch username from Firestore
       profileImage: data['profileImage'],
@@ -45,7 +42,6 @@ class UserModel {
 
   Map<String, dynamic> toFirestore() {
     return {
-      'name': name,
       'email': email,
       'username': username, // Add username to Firestore
       'profileImage': profileImage,

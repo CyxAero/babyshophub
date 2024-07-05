@@ -1,4 +1,4 @@
-package com.example.babyshophub_user
+package com.cyx.babyshophub_user
 
 import io.flutter.embedding.android.FlutterActivity
 

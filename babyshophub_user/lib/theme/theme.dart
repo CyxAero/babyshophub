@@ -24,7 +24,7 @@ class BabyShopHubTheme {
       tertiary: Color(0xFF989DA8),
       error: Color(0xFFC32F27),
       onError: Color(0xFFF8F8F8),
-      surface: Color(0xFFDADADA),
+      surface: Color(0xFFF2CC8F),
       onSurface: Color(0xFF090909),
     );
 

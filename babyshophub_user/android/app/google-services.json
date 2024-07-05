@@ -39,10 +39,10 @@
               "client_type": 3
             },
             {
-              "client_id": "165972287104-mfdvo5ejutucgsqegc85p05073kd6bor.apps.googleusercontent.com",
+              "client_id": "165972287104-jeqim1kpgooiu7tsfqiq92n2djf3chda.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.babyshophubAdmin"
+                "bundle_id": "com.example.babyshophubUser"
               }
             }
           ]
@@ -57,6 +57,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "165972287104-43coehneer01avj43lv83kph2tp0r04a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cyx.babyshophub_user",
+            "certificate_hash": "44a3c3b76ebd0f91e884bf4256783ce48e02374c"
+          }
+        },
         {
           "client_id": "165972287104-7m17ikp53ff1k4icv87ot60ikuvavmjm.apps.googleusercontent.com",
           "client_type": 3
@@ -75,10 +83,10 @@
               "client_type": 3
             },
             {
-              "client_id": "165972287104-mfdvo5ejutucgsqegc85p05073kd6bor.apps.googleusercontent.com",
+              "client_id": "165972287104-jeqim1kpgooiu7tsfqiq92n2djf3chda.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.babyshophubAdmin"
+                "bundle_id": "com.example.babyshophubUser"
               }
             }
           ]

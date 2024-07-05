@@ -136,7 +136,6 @@ class AuthService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('userId', user.userId);
     await prefs.setString('email', user.email);
-    await prefs.setString('name', user.name);
     await prefs.setString('username', user.username ?? '');
     // Add other user properties as needed
   }
@@ -145,15 +144,13 @@ class AuthService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? userId = prefs.getString('userId');
     String? email = prefs.getString('email');
-    String? name = prefs.getString('name');
     String? username = prefs.getString('username');
     // Load other user properties as needed
 
-    if (userId != null && email != null && name != null) {
+    if (userId != null && email != null) {
       return UserModel(
         userId: userId,
         email: email,
-        name: name,
         username: username,
         isAdmin: false, // or load the correct value
       );

@@ -16,5 +16,7 @@ extension CustomColors on ColorScheme {
 
   Color get black2 => const Color(0xFF1E1E1E);
 
+  Color get orange => const Color(0xFFFF6D1F);
+
   Color get red => const Color(0xFFC32F27);
 }
