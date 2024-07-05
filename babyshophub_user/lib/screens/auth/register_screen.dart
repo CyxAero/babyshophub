@@ -243,20 +243,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         if (!context.mounted) return;
 
                         if (user != null) {
-                          Navigator.push(
+                          Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
                               builder: (context) => MainApp(
                                 user: user,
                               ),
                             ),
+                            (route) => false,
                           );
-                          // Navigator.of(context)
-                          //     .pushReplacement(MaterialPageRoute(
-                          //   builder: (context) => MainApp(
-                          //     user: user,
-                          //   ),
-                          // ));
 
                           CustomSnackBar.showCustomSnackbar(
                             context,
@@ -343,13 +338,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     'User registered with Google Sign-In.',
                     false,
                   );
-                  Navigator.push(
+                  Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                       builder: (context) => MainApp(
                         user: user,
                       ),
                     ),
+                    (route) => false,
                   );
                 } else {
                   CustomSnackBar.showCustomSnackbar(

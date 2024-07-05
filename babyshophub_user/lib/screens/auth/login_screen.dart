@@ -66,13 +66,14 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!context.mounted) return;
 
       if (user != null) {
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => MainApp(
               user: user,
             ),
           ),
+          (route) => false,
         );
 
         CustomSnackBar.showCustomSnackbar(
@@ -262,19 +263,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     'User logged in with Google Sign-In.',
                     false,
                   );
-                  Navigator.push(
+                  Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                       builder: (context) => MainApp(
                         user: user,
                       ),
                     ),
+                    (route) => false,
                   );
-                  // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  //   builder: (context) => MainApp(
-                  //     user: user,
-                  //   ),
-                  // ));
                 } else {
                   CustomSnackBar.showCustomSnackbar(
                     context,

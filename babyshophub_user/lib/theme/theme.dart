@@ -25,6 +25,7 @@ class BabyShopHubTheme {
       error: Color(0xFFC32F27),
       onError: Color(0xFFF8F8F8),
       surface: Color(0xFFF2CC8F),
+      surfaceContainer: Color(0xFFF2CC8F),
       onSurface: Color(0xFF090909),
     );
 
@@ -71,6 +72,8 @@ class BabyShopHubTheme {
       error: Color(0xFFC32F27),
       surface: Color(0xFF090909),
       surfaceContainer: Color(0xFF1E1E1E),
+      // surface: Color(0xFF989DA8),
+      // surfaceContainer: Color(0xFF989DA8),
       onSurface: Color(0xFFDADADA),
     );
 
