@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "165972287104",
+    "project_id": "babyshophub-afe3b",
+    "storage_bucket": "babyshophub-afe3b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165972287104:android:ae7645031555a235741065",
+        "android_client_info": {
+          "package_name": "com.cyx.babyshophub_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "165972287104-41988gphm8pbq8e3s01tj67bpvh2pjuv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cyx.babyshophub_admin",
+            "certificate_hash": "44a3c3b76ebd0f91e884bf4256783ce48e02374c"
+          }
+        },
+        {
+          "client_id": "165972287104-7m17ikp53ff1k4icv87ot60ikuvavmjm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC29CXh6zsfwLKzKULh-kMhfxaOvkPpe9s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "165972287104-7m17ikp53ff1k4icv87ot60ikuvavmjm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "165972287104-jeqim1kpgooiu7tsfqiq92n2djf3chda.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.babyshophubUser"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165972287104:android:9edf7a12ba76660d741065",
+        "android_client_info": {
+          "package_name": "com.cyx.babyshophub_user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "165972287104-7m17ikp53ff1k4icv87ot60ikuvavmjm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC29CXh6zsfwLKzKULh-kMhfxaOvkPpe9s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "165972287104-7m17ikp53ff1k4icv87ot60ikuvavmjm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "165972287104-jeqim1kpgooiu7tsfqiq92n2djf3chda.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.babyshophubUser"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
