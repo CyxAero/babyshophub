@@ -48,7 +48,7 @@ class _MainAppState extends State<MainApp> {
         child: NavigationBar(
           backgroundColor: Theme.of(context).colorScheme.surface,
           indicatorColor: Theme.of(context).colorScheme.primary,
-          height: 100,
+          height: 80,
           selectedIndex: _currentPage,
           labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           animationDuration: const Duration(seconds: 1),

@@ -27,13 +27,13 @@ class ProductService {
     return snapshot.docs.map((doc) => ProductModel.fromFirestore(doc)).toList();
   }
 
-  Future<String> uploadImage(String filePath) async {
-    File file = File(filePath);
-    String fileName = basename(filePath);
-    Reference storageReference =
-        FirebaseStorage.instance.ref().child('product_images/$fileName');
-    UploadTask uploadTask = storageReference.putFile(file);
-    await uploadTask.whenComplete(() {});
-    return await storageReference.getDownloadURL();
-  }
+  // Future<String> uploadImage(String filePath) async {
+  //   File file = File(filePath);
+  //   String fileName = basename(filePath);
+  //   Reference storageReference =
+  //       FirebaseStorage.instance.ref().child('product_images/$fileName');
+  //   UploadTask uploadTask = storageReference.putFile(file);
+  //   await uploadTask.whenComplete(() {});
+  //   return await storageReference.getDownloadURL();
+  // }
 }

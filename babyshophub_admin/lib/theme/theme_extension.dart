@@ -4,6 +4,7 @@ extension CustomColors on ColorScheme {
   Color get pastelBlue => const Color(0xFF669BBC);
 
   Color get green => const Color(0xFF52B788);
+
   Color get pastelGreen => const Color(0xFFD9DED3);
 
   Color get cadetGrey => const Color(0xFF989DA8);
