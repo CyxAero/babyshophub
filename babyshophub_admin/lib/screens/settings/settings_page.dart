@@ -1,7 +1,7 @@
 import 'package:babyshophub_admin/models/user_model.dart';
 import 'package:babyshophub_admin/theme/theme_extension.dart';
 import 'package:babyshophub_admin/theme/theme_provider.dart';
-import 'package:babyshophub_admin/widgets/heading_appbar.dart';
+import 'package:babyshophub_admin/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +21,7 @@ class _SettingsPageState extends State<SettingsPage> {
     bool isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: const CustomAppBar(title: "Settings", height: 150),
       body: SingleChildScrollView(
         child: Padding(

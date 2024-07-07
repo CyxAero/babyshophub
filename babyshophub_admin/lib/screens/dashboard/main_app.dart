@@ -1,6 +1,9 @@
 import 'package:babyshophub_admin/models/user_model.dart';
 import 'package:babyshophub_admin/screens/dashboard/dashboard_page.dart';
+import 'package:babyshophub_admin/screens/orders/orders_page.dart';
+import 'package:babyshophub_admin/screens/products/products_page.dart';
 import 'package:babyshophub_admin/screens/settings/settings_page.dart';
+import 'package:babyshophub_admin/screens/users/users_page.dart';
 import 'package:flutter/material.dart';
 
 class MainApp extends StatefulWidget {
@@ -22,9 +25,9 @@ class _MainAppState extends State<MainApp> {
     super.initState();
     pages.addAll([
       DashboardPage(user: widget.user),
-      Orders(user: widget.user),
-      Products(user: widget.user),
-      Users(user: widget.user),
+      ProductsPage(user: widget.user),
+      OrdersPage(user: widget.user),
+      UsersPage(user: widget.user),
       SettingsPage(user: widget.user),
     ]);
   }
@@ -47,6 +50,8 @@ class _MainAppState extends State<MainApp> {
           indicatorColor: Theme.of(context).colorScheme.primary,
           height: 100,
           selectedIndex: _currentPage,
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          animationDuration: const Duration(seconds: 1),
           onDestinationSelected: (index) {
             setState(() {
               _currentPage = index;
@@ -54,80 +59,31 @@ class _MainAppState extends State<MainApp> {
           },
           destinations: const [
             NavigationDestination(
-              icon: Icon(Icons.dashboard_customize_rounded),
+              icon: Icon(Icons.dashboard_outlined),
+              selectedIcon: Icon(Icons.dashboard_rounded),
               label: 'Dashboard',
             ),
             NavigationDestination(
-              icon: Icon(Icons.shopping_bag_rounded),
-              label: 'Orders',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.shopping_bag_rounded),
+              icon: Icon(Icons.shopping_bag_outlined),
+              selectedIcon: Icon(Icons.shopping_bag_rounded),
               label: 'Products',
             ),
             NavigationDestination(
-              icon: Icon(Icons.people_alt_rounded),
+              icon: Icon(Icons.receipt_outlined),
+              selectedIcon: Icon(Icons.receipt_rounded),
+              label: 'Orders',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.people_outlined),
+              selectedIcon: Icon(Icons.people_rounded),
               label: 'Users',
             ),
             NavigationDestination(
-              icon: Icon(Icons.settings_rounded),
+              icon: Icon(Icons.settings_outlined),
+              selectedIcon: Icon(Icons.settings_rounded),
               label: 'Settings',
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class Orders extends StatelessWidget {
-  final UserModel user;
-
-  const Orders({super.key, required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          "Orders",
-          style: Theme.of(context).textTheme.displayMedium,
-        ),
-      ),
-    );
-  }
-}
-
-class Products extends StatelessWidget {
-  final UserModel user;
-
-  const Products({super.key, required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          "Products",
-          style: Theme.of(context).textTheme.displayMedium,
-        ),
-      ),
-    );
-  }
-}
-
-class Users extends StatelessWidget {
-  final UserModel user;
-
-  const Users({super.key, required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          "Users",
-          style: Theme.of(context).textTheme.displayMedium,
         ),
       ),
     );

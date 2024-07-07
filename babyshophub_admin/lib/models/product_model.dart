@@ -6,7 +6,7 @@ class ProductModel {
   String description;
   double price;
   List<String> images;
-  String category;
+  List<String> categories;
   int stock;
 
   ProductModel({
@@ -15,7 +15,7 @@ class ProductModel {
     required this.description,
     required this.price,
     required this.images,
-    required this.category,
+    required this.categories,
     required this.stock,
   });
 
@@ -25,10 +25,21 @@ class ProductModel {
       productId: doc.id,
       name: data['name'] ?? '',
       description: data['description'] ?? '',
-      price: data['price'] ?? 0.0,
+      price: (data['price'] as num).toDouble() ?? 0.0,
       images: List<String>.from(data['images'] ?? []),
-      category: data['category'] ?? '',
+      categories: List<String>.from(data['categories'] ?? []),
       stock: data['stock'] ?? 0,
     );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'name': name,
+      'description': description,
+      'price': price,
+      'images': images,
+      'categories': categories,
+      'stock': stock,
+    };
   }
 }

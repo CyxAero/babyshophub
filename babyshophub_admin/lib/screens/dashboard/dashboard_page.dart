@@ -1,5 +1,5 @@
 import 'package:babyshophub_admin/models/user_model.dart';
-import 'package:babyshophub_admin/widgets/heading_appbar.dart';
+import 'package:babyshophub_admin/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -10,6 +10,7 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: const CustomAppBar(title: "BabyShopHub Admin", height: 150),
       body: SingleChildScrollView(
         child: Padding(

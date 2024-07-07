@@ -18,7 +18,7 @@ class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
           Navigator.of(context).pop(); // Handle back navigation
         },
       ),
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Colors.transparent,
       elevation: 0,
     );
   }
