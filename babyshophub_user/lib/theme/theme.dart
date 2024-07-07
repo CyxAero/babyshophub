@@ -5,17 +5,96 @@ import 'package:google_fonts/google_fonts.dart';
 class BabyShopHubTheme {
   const BabyShopHubTheme();
 
-  TextTheme getTextTheme() {
-    return GoogleFonts.ralewayTextTheme(
-      const TextTheme(
-        headlineLarge: TextStyle(fontFamily: 'Syne', color: Colors.black),
-        bodyLarge: TextStyle(color: Colors.black),
+  TextTheme getTextTheme([Color textColor = const Color(0xFF1E1E1E)]) {
+    return TextTheme(
+      // Display styles
+      displayLarge: GoogleFonts.syne(
+        fontSize: 57,
+        fontWeight: FontWeight.w800,
+        color: textColor,
+      ),
+      displayMedium: GoogleFonts.syne(
+        fontSize: 45,
+        fontWeight: FontWeight.w700,
+        color: textColor,
+      ),
+      displaySmall: GoogleFonts.syne(
+        fontSize: 36,
+        fontWeight: FontWeight.w700,
+        color: textColor,
+      ),
+
+      // Headline styles
+      headlineLarge: GoogleFonts.syne(
+        fontSize: 32,
+        fontWeight: FontWeight.w600,
+        color: textColor,
+      ),
+      headlineMedium: GoogleFonts.syne(
+        fontSize: 28,
+        fontWeight: FontWeight.w600,
+        color: textColor,
+      ),
+      headlineSmall: GoogleFonts.syne(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        color: textColor,
+      ),
+
+      // Title styles
+      titleLarge: GoogleFonts.raleway(
+        fontSize: 22,
+        fontWeight: FontWeight.w500,
+        color: textColor,
+      ),
+      titleMedium: GoogleFonts.raleway(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: textColor,
+      ),
+      titleSmall: GoogleFonts.raleway(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: textColor,
+      ),
+
+      // Body styles
+      bodyLarge: GoogleFonts.raleway(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: textColor,
+      ),
+      bodyMedium: GoogleFonts.raleway(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: textColor,
+      ),
+      bodySmall: GoogleFonts.raleway(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: textColor,
+      ),
+
+      // Label styles
+      labelLarge: GoogleFonts.raleway(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: textColor,
+      ),
+      labelMedium: GoogleFonts.raleway(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        color: textColor,
+      ),
+      labelSmall: GoogleFonts.raleway(
+        fontSize: 11,
+        fontWeight: FontWeight.w500,
+        color: textColor,
       ),
     );
   }
 
   ThemeData get lightTheme {
-    final TextTheme textTheme = getTextTheme();
     const ColorScheme colorScheme = ColorScheme.light(
       primary: Color(0xFF669BBC),
       onPrimary: Color(0xFF1E1E1E),
@@ -24,22 +103,21 @@ class BabyShopHubTheme {
       tertiary: Color(0xFF989DA8),
       error: Color(0xFFC32F27),
       onError: Color(0xFFF8F8F8),
-      surface: Color(0xFFF2CC8F),
-      surfaceContainer: Color(0xFFF2CC8F),
+      surface: Color(0xFFD9DED3),
+      surfaceContainer: Color(0xFFD9DED3),
       onSurface: Color(0xFF090909),
     );
 
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
+      textTheme: getTextTheme(),
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.black2,
         elevation: 0,
       ),
       scaffoldBackgroundColor: colorScheme.white2,
-      fontFamily: 'Raleway',
-      textTheme: textTheme,
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -59,10 +137,6 @@ class BabyShopHubTheme {
   }
 
   ThemeData get darkTheme {
-    final TextTheme textTheme = getTextTheme().apply(
-      bodyColor: const Color(0xFFDADADA),
-      displayColor: const Color(0xFFDADADA),
-    );
     const ColorScheme colorScheme = ColorScheme.dark(
       primary: Color(0xFF669BBC),
       onPrimary: Color(0xFF1E1E1E),
@@ -72,22 +146,19 @@ class BabyShopHubTheme {
       error: Color(0xFFC32F27),
       surface: Color(0xFF090909),
       surfaceContainer: Color(0xFF1E1E1E),
-      // surface: Color(0xFF989DA8),
-      // surfaceContainer: Color(0xFF989DA8),
       onSurface: Color(0xFFDADADA),
     );
 
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
+      textTheme: getTextTheme(const Color(0xFFDADADA)),
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.black1,
         foregroundColor: colorScheme.white1,
         elevation: 0,
       ),
       scaffoldBackgroundColor: colorScheme.black1,
-      fontFamily: 'Raleway',
-      textTheme: textTheme,
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
