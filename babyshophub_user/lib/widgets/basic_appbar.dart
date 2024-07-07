@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const BasicAppBar({super.key});
+  final double height;
+  final String? title;
+
+  const BasicAppBar({super.key, required this.height, this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +21,19 @@ class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
           Navigator.of(context).pop(); // Handle back navigation
         },
       ),
+      title: Text(
+        title!,
+        style: Theme.of(context).textTheme.displaySmall?.copyWith(
+              fontWeight: FontWeight.w700,
+              fontSize: 24,
+            ),
+        maxLines: 2,
+      ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       elevation: 0,
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(120);
+  Size get preferredSize => Size.fromHeight(height);
 }

@@ -1,10 +1,19 @@
+import 'package:BabyShopHub/models/user_model.dart';
+import 'package:BabyShopHub/screens/cart/cart_page.dart';
+import 'package:BabyShopHub/theme/theme_extension.dart';
+import 'package:BabyShopHub/widgets/cart_icon.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final UserModel user;
   final String title;
   final double height;
 
-  const CustomAppBar({super.key, required this.title, required this.height});
+  const CustomAppBar(
+      {super.key,
+      required this.user,
+      required this.title,
+      required this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +23,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         title,
         style: Theme.of(context).textTheme.displaySmall?.copyWith(
               fontWeight: FontWeight.w700,
+              fontSize: 24,
             ),
         maxLines: 2,
       ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: CartIcon(
+            iconColor: Theme.of(context).colorScheme.black1,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CartPage(user: user),
+                ),
+              );
+            },
+          ),
+        )
+      ],
       backgroundColor: Colors.transparent,
       toolbarHeight: height,
       bottom: PreferredSize(
@@ -37,5 +63,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   // Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-  Size get preferredSize => const Size.fromHeight(150);
+  Size get preferredSize => const Size.fromHeight(100);
 }

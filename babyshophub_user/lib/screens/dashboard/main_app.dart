@@ -26,7 +26,7 @@ class _MainAppState extends State<MainApp> {
     pages.addAll([
       DashboardPage(user: widget.user),
       ShopPage(user: widget.user),
-      CartPage(user: widget.user),
+      // CartPage(user: widget.user),
       SavedProductsPage(user: widget.user),
       SettingsPage(user: widget.user),
     ]);
@@ -68,11 +68,11 @@ class _MainAppState extends State<MainApp> {
               selectedIcon: Icon(Icons.shopping_bag_rounded),
               label: 'Shop',
             ),
-            NavigationDestination(
-              icon: Icon(Icons.shopping_cart_outlined),
-              selectedIcon: Icon(Icons.shopping_cart_rounded),
-              label: 'Cart',
-            ),
+            // NavigationDestination(
+            //   icon: Icon(Icons.shopping_cart_outlined),
+            //   selectedIcon: Icon(Icons.shopping_cart_rounded),
+            //   label: 'Cart',
+            // ),
             NavigationDestination(
               icon: Icon(Icons.saved_search_outlined),
               selectedIcon: Icon(Icons.saved_search_rounded),
