@@ -28,7 +28,6 @@ class _SettingsPageState extends State<SettingsPage> {
             SliverAppBar(
               floating: true,
               pinned: true,
-              centerTitle: true,
               automaticallyImplyLeading: false,
               toolbarHeight: 30,
               expandedHeight: 150.0,
