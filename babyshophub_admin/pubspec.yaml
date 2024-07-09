@@ -39,6 +39,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   google_fonts: ^6.2.1
   google_sign_in: ^6.2.1
+  image_picker: ^1.1.2
   logger: ^2.3.0
   phosphor_flutter: ^2.1.0
   provider: ^6.1.2
@@ -74,6 +75,7 @@ flutter:
     - assets/images/baby.jpg
     - assets/images/baby.webp
     - assets/images/watch.jpeg
+    - assets/images/toys.jpeg
     - .env
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

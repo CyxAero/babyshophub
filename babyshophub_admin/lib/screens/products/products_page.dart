@@ -1,4 +1,5 @@
 import 'package:babyshophub_admin/models/user_model.dart';
+import 'package:babyshophub_admin/screens/products/add_product_sheet.dart';
 import 'package:babyshophub_admin/theme/theme_extension.dart';
 import 'package:babyshophub_admin/widgets/product_card.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +20,9 @@ class ProductsPage extends StatelessWidget {
               floating: true,
               pinned: true,
               automaticallyImplyLeading: false,
-              toolbarHeight: 30,
+              toolbarHeight: 60,
               expandedHeight: 150.0,
-              collapsedHeight: 52,
+              collapsedHeight: 80,
               flexibleSpace: Padding(
                 // TODO: Do you want to use padding or not??
                 padding: const EdgeInsets.only(left: 16),
@@ -34,112 +35,103 @@ class ProductsPage extends StatelessWidget {
               ),
               backgroundColor: Theme.of(context).colorScheme.surface,
               surfaceTintColor: Theme.of(context).colorScheme.surface,
-              // bottom: PreferredSize(
-              //   preferredSize: const Size.fromHeight(52),
-              //   child: SizedBox(
-              //     height: 52,
-              //     child: ListView(
-              //       scrollDirection: Axis.horizontal,
-              //       padding: const EdgeInsets.symmetric(horizontal: 16),
-              //       children: [
-              //         Container(
-              //           decoration: BoxDecoration(
-              //             shape: BoxShape.rectangle,
-              //             color: Theme.of(context).colorScheme.orange,
-              //             borderRadius:
-              //                 const BorderRadius.all(Radius.circular(18)),
-              //           ),
-              //           child: IconButton(
-              //             icon: const Icon(Icons.search),
-              //             onPressed: () {
-              //               // TODO: Implement search functionality
-              //             },
-              //           ),
-              //         ),
-              //         const SizedBox(width: 8),
-              //         FilterChip(
-              //           label: const Text('Food'),
-              //           onSelected: (bool selected) {},
-              //         ),
-              //         const SizedBox(width: 8),
-              //         FilterChip(
-              //           label: const Text('Clothes'),
-              //           onSelected: (bool selected) {},
-              //         ),
-              //         const SizedBox(width: 8),
-              //         FilterChip(
-              //           label: const Text('Toys'),
-              //           onSelected: (bool selected) {},
-              //         ),
-              //         const SizedBox(width: 8),
-              //         FilterChip(
-              //           label: const Text('Furniture'),
-              //           onSelected: (bool selected) {},
-              //         ),
-              //         const SizedBox(width: 8),
-              //         FilterChip(
-              //           label: const Text('Gear'),
-              //           onSelected: (bool selected) {},
-              //         ),
-              //         // Add more filter chips as needed
-              //       ],
-              //     ),
-              //   ),
-              // ),
-            ),
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: _SliverAppBarDelegate(
-                minHeight: 60.0,
-                maxHeight: 60.0,
-                child: Container(
-                  color: Theme.of(context).colorScheme.surface,
-                  child: Padding(
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(60),
+                child: SizedBox(
+                  height: 60,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
                       horizontal: 16,
+                      vertical: 8,
                     ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          // const SizedBox(width: 16),
-                          Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              color: Theme.of(context).colorScheme.orange,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(18)),
-                            ),
-                            child: IconButton(
-                              icon: const Icon(Icons.search),
-                              onPressed: () {
-                                // TODO: Implement search functionality
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          _buildFilterChip('Food'),
-                          const SizedBox(width: 8),
-                          _buildFilterChip('Clothes'),
-                          const SizedBox(width: 8),
-                          _buildFilterChip('Furniture'),
-                          const SizedBox(width: 8),
-                          _buildFilterChip('Toys'),
-                          const SizedBox(width: 8),
-                          _buildFilterChip('Electronics'),
-                          const SizedBox(width: 8),
-                          _buildFilterChip('Shoes'),
-                          const SizedBox(width: 8),
-                          _buildFilterChip('Kitchen'),
-                          // Add more filter chips as needed
-                        ],
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          color: Theme.of(context).colorScheme.orange,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(18)),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.search),
+                          onPressed: () {
+                            // TODO: Implement search functionality
+                          },
+                        ),
                       ),
-                    ),
+                      const SizedBox(width: 8),
+                      _buildFilterChip('Food'),
+                      const SizedBox(width: 8),
+                      _buildFilterChip('Clothes'),
+                      const SizedBox(width: 8),
+                      _buildFilterChip('Furniture'),
+                      const SizedBox(width: 8),
+                      _buildFilterChip('Toys'),
+                      const SizedBox(width: 8),
+                      _buildFilterChip('Electronics'),
+                      const SizedBox(width: 8),
+                      _buildFilterChip('Shoes'),
+                      const SizedBox(width: 8),
+                      _buildFilterChip('Kitchen'),
+                    ],
                   ),
                 ),
               ),
             ),
+            // SliverPersistentHeader(
+            //   pinned: true,
+            //   delegate: _SliverAppBarDelegate(
+            //     minHeight: 60.0,
+            //     maxHeight: 60.0,
+            //     child: Container(
+            //       color: Theme.of(context).colorScheme.surface,
+            //       child: Padding(
+            //         padding: const EdgeInsets.symmetric(
+            //           vertical: 8.0,
+            //           horizontal: 16,
+            //         ),
+            //         child: SingleChildScrollView(
+            //           scrollDirection: Axis.horizontal,
+            //           child: Row(
+            //             children: [
+            //               // const SizedBox(width: 16),
+            //               Container(
+            //                 decoration: BoxDecoration(
+            //                   shape: BoxShape.rectangle,
+            //                   color: Theme.of(context).colorScheme.orange,
+            //                   borderRadius:
+            //                       const BorderRadius.all(Radius.circular(18)),
+            //                 ),
+            //                 child: IconButton(
+            //                   icon: const Icon(Icons.search),
+            //                   onPressed: () {
+            //                     // TODO: Implement search functionality
+            //                   },
+            //                 ),
+            //               ),
+            //               const SizedBox(width: 8),
+            //               _buildFilterChip('Food'),
+            //               const SizedBox(width: 8),
+            //               _buildFilterChip('Clothes'),
+            //               const SizedBox(width: 8),
+            //               _buildFilterChip('Furniture'),
+            //               const SizedBox(width: 8),
+            //               _buildFilterChip('Toys'),
+            //               const SizedBox(width: 8),
+            //               _buildFilterChip('Electronics'),
+            //               const SizedBox(width: 8),
+            //               _buildFilterChip('Shoes'),
+            //               const SizedBox(width: 8),
+            //               _buildFilterChip('Kitchen'),
+            //               // Add more filter chips as needed
+            //             ],
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             SliverPadding(
               padding: const EdgeInsets.symmetric(
                 vertical: 24,
@@ -169,7 +161,11 @@ class ProductsPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: Implement bottom sheet for adding new product
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (context) => const AddProductBottomSheet(),
+          );
         },
         child: const Icon(Icons.add),
       ),

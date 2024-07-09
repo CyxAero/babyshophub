@@ -10,34 +10,34 @@ class BabyShopHubTheme {
       // Display styles
       displayLarge: GoogleFonts.syne(
         fontSize: 57,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w600,
         color: textColor,
       ),
       displayMedium: GoogleFonts.syne(
         fontSize: 45,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         color: textColor,
       ),
       displaySmall: GoogleFonts.syne(
         fontSize: 36,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         color: textColor,
       ),
 
       // Headline styles
       headlineLarge: GoogleFonts.syne(
         fontSize: 32,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
         color: textColor,
       ),
       headlineMedium: GoogleFonts.syne(
         fontSize: 28,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
         color: textColor,
       ),
       headlineSmall: GoogleFonts.syne(
         fontSize: 24,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
         color: textColor,
       ),
 
