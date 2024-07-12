@@ -1,4 +1,5 @@
 import 'package:babyshophub_admin/firebase_options.dart';
+import 'package:babyshophub_admin/providers/product_provider.dart';
 import 'package:babyshophub_admin/screens/auth/auth_check.dart';
 import 'package:babyshophub_admin/services/auth_service.dart';
 import 'package:babyshophub_admin/theme/theme_provider.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider<AuthService>(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) {

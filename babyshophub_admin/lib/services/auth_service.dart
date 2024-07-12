@@ -111,7 +111,7 @@ class AuthService {
           'profileImage': user?.photoURL,
           'addresses': [],
           'paymentMethods': [],
-          'isAdmin': false,
+          'isAdmin': true,
         });
       }
 

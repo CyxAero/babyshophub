@@ -1,186 +1,309 @@
+import 'package:babyshophub_admin/models/product_model.dart';
 import 'package:babyshophub_admin/models/user_model.dart';
 import 'package:babyshophub_admin/screens/products/add_product_sheet.dart';
-import 'package:babyshophub_admin/theme/theme_extension.dart';
+import 'package:babyshophub_admin/screens/products/test.dart';
+import 'package:babyshophub_admin/services/product_service.dart';
+import 'package:babyshophub_admin/theme/theme_provider.dart';
+import 'package:babyshophub_admin/widgets/custom_snackbar.dart';
 import 'package:babyshophub_admin/widgets/product_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ProductsPage extends StatelessWidget {
+class ProductsPage extends StatefulWidget {
   final UserModel user;
 
   const ProductsPage({super.key, required this.user});
 
   @override
+  State<ProductsPage> createState() => _ProductsPageState();
+}
+
+class _ProductsPageState extends State<ProductsPage> {
+  late Future<List<ProductModel>> _productsFuture;
+  final List<String> _selectedProductIds = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchProducts();
+  }
+
+  void _fetchProducts() {
+    final productService = ProductService();
+    setState(() {
+      _productsFuture = productService.getProducts();
+    });
+  }
+
+  Future<void> _refreshProducts() async {
+    _fetchProducts();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    bool isDarkMode = themeProvider.themeMode == ThemeMode.dark;
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              floating: true,
-              pinned: true,
-              automaticallyImplyLeading: false,
-              toolbarHeight: 60,
-              expandedHeight: 150.0,
-              collapsedHeight: 80,
-              flexibleSpace: Padding(
-                // TODO: Do you want to use padding or not??
-                padding: const EdgeInsets.only(left: 16),
-                child: FlexibleSpaceBar(
-                  title: Text(
-                    'Products',
-                    style: Theme.of(context).textTheme.displaySmall,
-                  ),
-                ),
-              ),
-              backgroundColor: Theme.of(context).colorScheme.surface,
-              surfaceTintColor: Theme.of(context).colorScheme.surface,
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(60),
-                child: SizedBox(
-                  height: 60,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          color: Theme.of(context).colorScheme.orange,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(18)),
-                        ),
-                        child: IconButton(
-                          icon: const Icon(Icons.search),
-                          onPressed: () {
-                            // TODO: Implement search functionality
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      _buildFilterChip('Food'),
-                      const SizedBox(width: 8),
-                      _buildFilterChip('Clothes'),
-                      const SizedBox(width: 8),
-                      _buildFilterChip('Furniture'),
-                      const SizedBox(width: 8),
-                      _buildFilterChip('Toys'),
-                      const SizedBox(width: 8),
-                      _buildFilterChip('Electronics'),
-                      const SizedBox(width: 8),
-                      _buildFilterChip('Shoes'),
-                      const SizedBox(width: 8),
-                      _buildFilterChip('Kitchen'),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            // SliverPersistentHeader(
-            //   pinned: true,
-            //   delegate: _SliverAppBarDelegate(
-            //     minHeight: 60.0,
-            //     maxHeight: 60.0,
-            //     child: Container(
-            //       color: Theme.of(context).colorScheme.surface,
-            //       child: Padding(
-            //         padding: const EdgeInsets.symmetric(
-            //           vertical: 8.0,
-            //           horizontal: 16,
-            //         ),
-            //         child: SingleChildScrollView(
-            //           scrollDirection: Axis.horizontal,
-            //           child: Row(
-            //             children: [
-            //               // const SizedBox(width: 16),
-            //               Container(
-            //                 decoration: BoxDecoration(
-            //                   shape: BoxShape.rectangle,
-            //                   color: Theme.of(context).colorScheme.orange,
-            //                   borderRadius:
-            //                       const BorderRadius.all(Radius.circular(18)),
-            //                 ),
-            //                 child: IconButton(
-            //                   icon: const Icon(Icons.search),
-            //                   onPressed: () {
-            //                     // TODO: Implement search functionality
-            //                   },
-            //                 ),
-            //               ),
-            //               const SizedBox(width: 8),
-            //               _buildFilterChip('Food'),
-            //               const SizedBox(width: 8),
-            //               _buildFilterChip('Clothes'),
-            //               const SizedBox(width: 8),
-            //               _buildFilterChip('Furniture'),
-            //               const SizedBox(width: 8),
-            //               _buildFilterChip('Toys'),
-            //               const SizedBox(width: 8),
-            //               _buildFilterChip('Electronics'),
-            //               const SizedBox(width: 8),
-            //               _buildFilterChip('Shoes'),
-            //               const SizedBox(width: 8),
-            //               _buildFilterChip('Kitchen'),
-            //               // Add more filter chips as needed
-            //             ],
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 24,
-                horizontal: 16,
-              ),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1,
-                  crossAxisSpacing: 2,
-                  mainAxisSpacing: 2,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return ProductCard(
-                      name: 'Product ${index + 1}',
-                      price: '\$${(index + 1) * 100}',
-                      imageUrl: 'assets/images/watch.jpeg',
-                    );
-                  },
-                  childCount: 10, // Replace with actual product count
-                ),
-              ),
-            ),
-          ],
+        child: RefreshIndicator(
+          onRefresh: _refreshProducts,
+          child: FutureBuilder<List<ProductModel>>(
+            future: _productsFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(
+                    child: Text(
+                  'Failed to load products',
+                  style: Theme.of(context).textTheme.displaySmall,
+                ));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return _buildEmptyState(context);
+              } else {
+                final products = snapshot.data!;
+                return _buildProductGrid(context, products);
+              }
+            },
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            builder: (context) => const AddProductBottomSheet(),
-          );
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: _selectedProductIds.isEmpty
+          ? FloatingActionButton(
+              onPressed: () => _showAddProductBottomSheet(context),
+              child: const Icon(Icons.add),
+            )
+          : FloatingActionButton(
+              onPressed: _confirmDelete,
+              backgroundColor: Theme.of(context).colorScheme.error,
+              child: const Icon(Icons.delete),
+            ),
+    );
+  }
+
+  // MARK: Build empty state
+  Widget _buildEmptyState(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Oops, no products here yet.',
+            style: Theme.of(context).textTheme.headlineMedium,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Add a new product.',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildFilterChip(String label) {
-    return FilterChip(
-      label: Text(label),
-      onSelected: (bool selected) {},
-      backgroundColor: Colors.grey[200],
-      selectedColor: Colors.blue[100],
-      labelStyle: const TextStyle(fontSize: 14),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+  // MARK: Build product grid
+  Widget _buildProductGrid(BuildContext context, List<ProductModel> products) {
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 24,
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                gradient: const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black54,
+                  ],
+                ),
+              ),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    child: Image.asset(
+                      'assets/images/toys.jpeg',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Positioned(
+                    top: 16.0,
+                    left: 16.0,
+                    right: 16.0,
+                    child: Text(
+                      'Your Products',
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 24,
+            horizontal: 16,
+          ),
+          sliver: SliverGrid(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 1,
+              crossAxisSpacing: 2,
+              mainAxisSpacing: 2,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                final product = products[index];
+                final isSelected =
+                    _selectedProductIds.contains(product.productId);
+                return GestureDetector(
+                  onTap: () {
+                    if (_selectedProductIds.isNotEmpty) {
+                      _toggleSelection(product.productId);
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductDetailsPageNew(
+                            product: product,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  onLongPress: () {
+                    _toggleSelection(product.productId);
+                  },
+                  child: Stack(
+                    children: [
+                      ProductCard(
+                        name: product.name,
+                        price: '\$${product.price.toStringAsFixed(2)}',
+                        imageUrl: product.images.isNotEmpty
+                            ? product.images[0]
+                            : 'assets/images/placeholder.png',
+                      ),
+                      if (isSelected)
+                        Positioned(
+                          top: 8,
+                          left: 8,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: Icon(Icons.check_circle,
+                                color: Theme.of(context).colorScheme.primary),
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              },
+              childCount: products.length,
+            ),
+          ),
+        ),
+      ],
     );
+  }
+
+  void _showAddProductBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      showDragHandle: true,
+      builder: (context) => FractionallySizedBox(
+        heightFactor: 0.8,
+        child: AddProductBottomSheet(
+          onProductAdded: _fetchProducts,
+        ),
+      ),
+    );
+  }
+
+  void _toggleSelection(String productId) {
+    setState(() {
+      if (_selectedProductIds.contains(productId)) {
+        _selectedProductIds.remove(productId);
+      } else {
+        _selectedProductIds.add(productId);
+      }
+    });
+  }
+
+  void _confirmDelete() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Delete Products',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          content: Text(
+            'Are you sure you want to delete the selected products?',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                'Cancel',
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _deleteSelectedProducts();
+                Navigator.of(context).pop();
+              },
+              child: Text('Delete',
+                  style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteSelectedProducts() async {
+    final productService = ProductService();
+    try {
+      for (String productId in _selectedProductIds) {
+        await productService.deleteProduct(productId);
+      }
+      CustomSnackBar.showCustomSnackbar(
+        context,
+        'Selected products deleted successfully!',
+        false,
+      );
+      _fetchProducts();
+    } catch (e) {
+      CustomSnackBar.showCustomSnackbar(
+        context,
+        'Failed to delete selected products. Please try again.',
+        true,
+      );
+    }
+    setState(() {
+      _selectedProductIds.clear();
+    });
   }
 }
 

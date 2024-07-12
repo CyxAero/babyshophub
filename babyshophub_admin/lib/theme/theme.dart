@@ -120,11 +120,14 @@ class BabyShopHubTheme {
       scaffoldBackgroundColor: colorScheme.white2,
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(20),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: colorScheme.primary),
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            width: 1.5,
+            color: colorScheme.primary,
+          ),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -161,11 +164,14 @@ class BabyShopHubTheme {
       scaffoldBackgroundColor: colorScheme.black1,
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(20),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: colorScheme.primary),
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            width: 1.5,
+            color: colorScheme.primary,
+          ),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(

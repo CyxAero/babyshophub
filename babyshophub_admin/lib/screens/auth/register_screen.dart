@@ -102,7 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: const BasicAppBar(),
+      appBar: const BasicAppBar(height: 80),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
