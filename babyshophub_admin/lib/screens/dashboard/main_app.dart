@@ -1,4 +1,3 @@
-import 'package:babyshophub_admin/models/user_model.dart';
 import 'package:babyshophub_admin/screens/dashboard/dashboard_page.dart';
 import 'package:babyshophub_admin/screens/orders/orders_page.dart';
 import 'package:babyshophub_admin/screens/products/products_page.dart';
@@ -7,9 +6,8 @@ import 'package:babyshophub_admin/screens/users/users_page.dart';
 import 'package:flutter/material.dart';
 
 class MainApp extends StatefulWidget {
-  final UserModel user;
 
-  const MainApp({super.key, required this.user});
+  const MainApp({super.key});
 
   @override
   State<MainApp> createState() => _MainAppState();
@@ -20,15 +18,16 @@ class _MainAppState extends State<MainApp> {
 
   final List<Widget> pages = [];
 
+
   @override
   void initState() {
     super.initState();
     pages.addAll([
-      DashboardPage(user: widget.user),
-      ProductsPage(user: widget.user),
-      OrdersPage(user: widget.user),
-      UsersPage(user: widget.user),
-      SettingsPage(user: widget.user),
+      const DashboardPage(),
+      const ProductsPage(),
+      const OrdersPage(),
+      const UsersPage(),
+      SettingsPage(),
     ]);
   }
 

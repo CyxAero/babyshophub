@@ -1,18 +1,13 @@
 import 'package:babyshophub_admin/models/product_model.dart';
-import 'package:babyshophub_admin/models/user_model.dart';
 import 'package:babyshophub_admin/screens/products/add_product_sheet.dart';
 import 'package:babyshophub_admin/screens/products/test.dart';
 import 'package:babyshophub_admin/services/product_service.dart';
-import 'package:babyshophub_admin/theme/theme_provider.dart';
 import 'package:babyshophub_admin/widgets/custom_snackbar.dart';
 import 'package:babyshophub_admin/widgets/product_card.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ProductsPage extends StatefulWidget {
-  final UserModel user;
-
-  const ProductsPage({super.key, required this.user});
+  const ProductsPage({super.key});
 
   @override
   State<ProductsPage> createState() => _ProductsPageState();
@@ -41,8 +36,8 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-    bool isDarkMode = themeProvider.themeMode == ThemeMode.dark;
+    // final themeProvider = Provider.of<ThemeProvider>(context);
+    // bool isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -284,6 +279,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
   Future<void> _deleteSelectedProducts() async {
     final productService = ProductService();
+
     try {
       for (String productId in _selectedProductIds) {
         await productService.deleteProduct(productId);

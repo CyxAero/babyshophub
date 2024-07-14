@@ -30,4 +30,16 @@ class ReviewService {
   Future<void> deleteReview(String reviewId) async {
     await _reviewsCollection.doc(reviewId).delete();
   }
+
+  Future<void> deleteReviewsForProduct(String productId) async {
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+    QuerySnapshot snapshot =
+        await _reviewsCollection.where('productId', isEqualTo: productId).get();
+
+    for (var doc in snapshot.docs) {
+      batch.delete(doc.reference);
+    }
+
+    await batch.commit();
+  }
 }

@@ -1,13 +1,12 @@
-import 'package:babyshophub_admin/models/user_model.dart';
+import 'package:babyshophub_admin/providers/user_provider.dart';
 import 'package:babyshophub_admin/theme/theme_extension.dart';
 import 'package:babyshophub_admin/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
-  final UserModel user;
 
-  const SettingsPage({super.key, required this.user});
+  const SettingsPage({super.key});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -18,6 +17,8 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     bool isDarkMode = themeProvider.themeMode == ThemeMode.dark;
+
+    final user = Provider.of<UserProvider>(context).user;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -74,7 +75,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         child: Center(
                           child: Text(
-                            widget.user.username!.substring(0, 2).toUpperCase(),
+                            user?.username?.substring(0, 2).toUpperCase() ??
+                                '??',
                             style: Theme.of(context).textTheme.headlineLarge,
                           ),
                         ),
@@ -83,7 +85,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     const SizedBox(height: 8),
                     Center(
                       child: Text(
-                        widget.user.username ?? "Unknown",
+                        user?.username ?? "Unknown",
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -92,7 +94,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     Center(
                       child: Text(
-                        widget.user.email,
+                        user?.email ?? 'Unknown',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),

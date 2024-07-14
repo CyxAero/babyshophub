@@ -1,6 +1,7 @@
 import "dart:io";
 
 import 'package:babyshophub_admin/models/product_model.dart';
+import 'package:babyshophub_admin/services/review_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:logger/logger.dart';
@@ -39,6 +40,10 @@ class ProductService {
             Logger().e('Failed to delete image: $e');
           }
         }
+
+        // Delete all related reviews
+        final reviewService = ReviewService();
+        await reviewService.deleteReviewsForProduct(productId);
 
         // Delete the product document from Firestore
         await _productCollection.doc(productId).delete();

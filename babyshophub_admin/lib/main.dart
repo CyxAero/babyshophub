@@ -1,7 +1,9 @@
 import 'package:babyshophub_admin/firebase_options.dart';
 import 'package:babyshophub_admin/providers/product_provider.dart';
+import 'package:babyshophub_admin/providers/user_provider.dart';
 import 'package:babyshophub_admin/screens/auth/auth_check.dart';
 import 'package:babyshophub_admin/services/auth_service.dart';
+import 'package:babyshophub_admin/services/review_service.dart';
 import 'package:babyshophub_admin/theme/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -31,12 +33,7 @@ Future<void> main() async {
   // ?Connecting to firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -47,6 +44,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<AuthService>(create: (_) => AuthService()),
+        Provider<ReviewService>(create: (_) => ReviewService()),
+        ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
       ],

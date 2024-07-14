@@ -1,10 +1,8 @@
-import 'package:babyshophub_admin/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class UsersPage extends StatelessWidget {
-  final UserModel user;
 
-  const UsersPage({super.key, required this.user});
+  const UsersPage({super.key});
 
   @override
   Widget build(BuildContext context) {

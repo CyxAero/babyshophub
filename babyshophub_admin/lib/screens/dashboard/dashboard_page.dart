@@ -1,14 +1,16 @@
-import 'package:babyshophub_admin/models/user_model.dart';
+import 'package:babyshophub_admin/providers/user_provider.dart';
 import 'package:babyshophub_admin/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DashboardPage extends StatelessWidget {
-  final UserModel user;
 
-  const DashboardPage({super.key, required this.user});
+  const DashboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: const CustomAppBar(title: "Your Dashboard", height: 80),
@@ -25,7 +27,7 @@ class DashboardPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  "Hello, ${user.username ?? 'User'}!",
+                  "Hello, ${user?.username ?? 'User'}!",
                   style: Theme.of(context).textTheme.displaySmall,
                 ), // Accessing username
               ],
