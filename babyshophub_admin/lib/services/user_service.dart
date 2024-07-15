@@ -1,19 +1,37 @@
 import 'package:babyshophub_admin/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
+  final Logger _logger = Logger();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // Future<UserModel?> getUserById(String userId) async {
+  //   DocumentSnapshot doc =
+  //       await _firestore.collection('users').doc(userId).get();
+  //   if (doc.exists) {
+  //     return UserModel.fromFirestore(doc);
+  //   }
+  //   return null;
+  // }
+
   Future<UserModel?> getUserById(String userId) async {
-    DocumentSnapshot doc =
-        await _firestore.collection('users').doc(userId).get();
-    if (doc.exists) {
-      return UserModel.fromFirestore(doc);
+    _logger.i('Getting user by ID: $userId');
+    try {
+      DocumentSnapshot doc = await _firestore.collection('users').doc(userId).get();
+      if (doc.exists) {
+        _logger.i('User document found in Firestore');
+        return UserModel.fromFirestore(doc);
+      }
+      _logger.w('User document not found in Firestore');
+    } catch (e) {
+      _logger.e('Error getting user by ID: $e');
     }
     return null;
   }
+
 
   Future<UserModel> createUser(
       String userId, String email, String username, bool isAdmin,
@@ -54,12 +72,31 @@ class UserService {
     await prefs.setBool('isAdmin', user.isAdmin);
   }
 
+  // Future<UserModel?> loadUserFromPreferences() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? userId = prefs.getString('userId');
+  //   if (userId != null) {
+  //     return await getUserById(userId);
+  //   }
+  //   return null;
+  // }
+
   Future<UserModel?> loadUserFromPreferences() async {
+    _logger.i('Loading user from preferences...');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? userId = prefs.getString('userId');
+    _logger.i('UserId from preferences: $userId');
     if (userId != null) {
-      return await getUserById(userId);
+      UserModel? user = await getUserById(userId);
+      if (user != null) {
+        _logger.i('User loaded successfully: ${user.userId}');
+        return user;
+      } else {
+        _logger.w('User not found in Firestore, clearing preferences');
+        await clearUserFromPreferences();
+      }
     }
+    _logger.i('No user loaded from preferences');
     return null;
   }
 

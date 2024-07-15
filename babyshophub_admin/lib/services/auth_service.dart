@@ -10,13 +10,29 @@ class AuthService {
   final Logger _logger = Logger();
   final UserService _userService = UserService();
 
+  // Future<UserModel?> signInWithEmailAndPassword(
+  //     String email, String password) async {
+  //   try {
+  //     UserCredential result = await _auth.signInWithEmailAndPassword(
+  //       email: email,
+  //       password: password,
+  //     );
+  //     return await _userService.getUserById(result.user!.uid);
+  //   } catch (e) {
+  //     _logger.e("Error signing in with email and password: $e");
+  //     return null;
+  //   }
+  // }
+
   Future<UserModel?> signInWithEmailAndPassword(
       String email, String password) async {
     try {
+      _logger.i('Attempting to sign in with email: $email');
       UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      _logger.i('Sign in successful for user: ${result.user?.uid}');
       return await _userService.getUserById(result.user!.uid);
     } catch (e) {
       _logger.e("Error signing in with email and password: $e");
@@ -25,7 +41,11 @@ class AuthService {
   }
 
   Future<UserModel?> registerWithEmailAndPassword(
-      String email, String password, String username, bool isAdmin) async {
+    String email,
+    String password,
+    String username,
+    bool isAdmin,
+  ) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email,
