@@ -62,34 +62,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return Builder(
-//       builder: (context) {
-//         final brightness = MediaQuery.of(context).platformBrightness;
-//         const theme = BabyShopHubTheme();
-
-//         return MaterialApp(
-//           debugShowCheckedModeBanner: false,
-//           title: 'BabyShopHub Admin',
-//           theme: theme.lightTheme,
-//           darkTheme: theme.darkTheme,
-//           themeMode:
-//               brightness == Brightness.light ? ThemeMode.light : ThemeMode.dark,
-//           home: const GettingStarted(),
-//         );
-
-//       },
-//     );
-//   }
-// }
-
-
-// DONE: Connect to firebase backend
-// TODO: Create main app and connect to firebase backend
-// TODO: Initialize git

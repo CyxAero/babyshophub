@@ -16,23 +16,6 @@ class UserProvider with ChangeNotifier {
 
   UserModel? get user => _user;
 
-  // UserProvider() {
-  //   initUser();
-  // }
-
-  // Future<void> initUser() async {
-  //   _user = await _userService.loadUserFromPreferences();
-  //   notifyListeners();
-  //   _authService.authStateChanges.listen((firebaseUser) async {
-  //     if (firebaseUser == null) {
-  //       _user = null;
-  //     } else {
-  //       _user = await _userService.getUserById(firebaseUser.uid);
-  //     }
-  //     notifyListeners();
-  //   });
-  // }
-
   Future<void> initUser() async {
     if (_isInitialized) return;
     _logger.i('Initializing user...');

@@ -10,32 +10,6 @@ class AuthCheck extends StatelessWidget {
   const AuthCheck({super.key});
 
   @override
-  // Widget build(BuildContext context) {
-  //   return Consumer<UserProvider>(
-  //     builder: (context, userProvider, _) {
-  //       if (userProvider.user != null) {
-  //         return const MainApp();
-  //       } else {
-  //         return FutureBuilder(
-  //           future: userProvider.initUser(),
-  //           builder: (context, snapshot) {
-  //             if (snapshot.connectionState == ConnectionState.waiting) {
-  //               return const Scaffold(
-  //                 body: Center(child: CircularProgressIndicator()),
-  //               );
-  //             } else {
-  //               if (userProvider.user != null) {
-  //                 return const MainApp();
-  //               } else {
-  //                 return const GettingStarted();
-  //               }
-  //             }
-  //           },
-  //         );
-  //       }
-  //     },
-  //   );
-  // }
   Widget build(BuildContext context) {
     return Consumer<UserProvider>(
       builder: (context, userProvider, _) {

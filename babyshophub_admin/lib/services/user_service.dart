@@ -8,15 +8,6 @@ class UserService {
   final Logger _logger = Logger();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Future<UserModel?> getUserById(String userId) async {
-  //   DocumentSnapshot doc =
-  //       await _firestore.collection('users').doc(userId).get();
-  //   if (doc.exists) {
-  //     return UserModel.fromFirestore(doc);
-  //   }
-  //   return null;
-  // }
-
   Future<UserModel?> getUserById(String userId) async {
     _logger.i('Getting user by ID: $userId');
     try {
@@ -71,15 +62,6 @@ class UserService {
     await prefs.setString('username', user.username ?? '');
     await prefs.setBool('isAdmin', user.isAdmin);
   }
-
-  // Future<UserModel?> loadUserFromPreferences() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? userId = prefs.getString('userId');
-  //   if (userId != null) {
-  //     return await getUserById(userId);
-  //   }
-  //   return null;
-  // }
 
   Future<UserModel?> loadUserFromPreferences() async {
     _logger.i('Loading user from preferences...');
