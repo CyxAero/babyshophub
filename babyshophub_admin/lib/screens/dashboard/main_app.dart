@@ -1,12 +1,14 @@
 import 'package:babyshophub_admin/screens/dashboard/dashboard_page.dart';
+import 'package:babyshophub_admin/models/user_model.dart';
+import 'package:babyshophub_admin/providers/user_provider.dart';
 import 'package:babyshophub_admin/screens/orders/orders_page.dart';
 import 'package:babyshophub_admin/screens/products/products_page.dart';
 import 'package:babyshophub_admin/screens/settings/settings_page.dart';
 import 'package:babyshophub_admin/screens/users/users_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainApp extends StatefulWidget {
-
   const MainApp({super.key});
 
   @override
@@ -15,24 +17,29 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   int _currentPage = 0;
-
-  final List<Widget> pages = [];
-
+  List<Widget> pages = [];
 
   @override
   void initState() {
     super.initState();
-    pages.addAll([
+    // Initialize pages with the other pages that don't require user
+    pages = [
       const DashboardPage(),
       const ProductsPage(),
       const OrdersPage(),
       const UsersPage(),
-      SettingsPage(),
-    ]);
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
+
+    // Only add SettingsPage if user is not null
+    if (user != null && pages.length == 4) {
+      pages.add(SettingsPage(user: user));
+    }
+
     return Scaffold(
       body: pages[_currentPage],
       bottomNavigationBar: Container(

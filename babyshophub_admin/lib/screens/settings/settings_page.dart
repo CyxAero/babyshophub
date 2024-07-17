@@ -1,4 +1,5 @@
 import 'package:babyshophub_admin/providers/user_provider.dart';
+import 'package:babyshophub_admin/models/user_model.dart';
 import 'package:babyshophub_admin/theme/theme_extension.dart';
 import 'package:babyshophub_admin/theme/theme_provider.dart';
 // import 'package:babyshophub_admin/widgets/app_dialog.dart';
@@ -11,7 +12,9 @@ import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
 
-  const SettingsPage({super.key});
+    final UserModel user;
+
+    const SettingsPage({super.key, required this.user});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -247,4 +250,61 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          elevation: 32,
+          insetPadding: const EdgeInsets.all(32),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8))),
+          child: Container(
+            padding: const EdgeInsets.only(
+              top: 10,
+              left: 16,
+              right: 16,
+            ),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).colorScheme.surface,
+                  blurRadius: 16,
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "About Us",
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Text(
+                    "This product is a demo of an e-commerce baby shop app. It is not certified and is for educational purposes only.",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "Okay",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 }
