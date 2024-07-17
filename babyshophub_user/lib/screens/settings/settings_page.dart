@@ -1,9 +1,12 @@
 import 'package:BabyShopHub/screens/getting_started.dart'; 
 import 'package:BabyShopHub/models/user_model.dart';
+import 'package:BabyShopHub/screens/settings/change_password.dart';
+import 'package:BabyShopHub/screens/settings/update_profile_screen.dart';
 import 'package:BabyShopHub/theme/theme_extension.dart';
 import 'package:BabyShopHub/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wiredash/wiredash.dart';
 
 class SettingsPage extends StatefulWidget {
   final UserModel user;
@@ -113,13 +116,32 @@ class _SettingsPageState extends State<SettingsPage> {
                         icon: Icons.edit,
                         title: 'Edit profile',
                         trailing: const Icon(Icons.chevron_right),
-                        isDarkMode: isDarkMode),
+                        isDarkMode: isDarkMode,
+                        onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                UpdateProfileScreen(user: widget.user),
+                          ),
+                        );
+                      },
+                        ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
                       icon: Icons.lock,
                       title: 'Change password',
                       trailing: const Icon(Icons.chevron_right),
                       isDarkMode: isDarkMode,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ChangePassword(user: widget.user),
+                          ),
+                        );
+                      },
                     ),
 
                     const SizedBox(height: 32),
@@ -148,18 +170,34 @@ class _SettingsPageState extends State<SettingsPage> {
                         icon: Icons.info,
                         title: 'About us',
                         trailing: const Icon(Icons.chevron_right),
-                        isDarkMode: isDarkMode),
+                        isDarkMode: isDarkMode,
+                         onTap: () {
+                          _showDialog(context);
+                        }
+                        ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
                         icon: Icons.contact_support,
-                        title: 'Contact us',
+                        title: 'Feedback and Support',
                         trailing: const Icon(Icons.chevron_right),
-                        isDarkMode: isDarkMode),
+                        isDarkMode: isDarkMode,
+                        onTap: () {
+                        Wiredash.of(context).show(inheritMaterialTheme: true);
+                      },
+                        ),
+                        
 
                     // *Log out button
                     const SizedBox(height: 48),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const GettingStarted()),
+                          (Route<dynamic> route) => false,
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.all(22),
                         elevation: 0,
@@ -189,6 +227,7 @@ class _SettingsPageState extends State<SettingsPage> {
     required String title,
     required Widget trailing,
     required bool isDarkMode,
+    VoidCallback? onTap,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -203,8 +242,67 @@ class _SettingsPageState extends State<SettingsPage> {
           leading: Icon(icon),
           title: Text(title),
           trailing: trailing,
+          onTap: onTap,
         ),
       ),
     );
   }
+
+
+   void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          elevation: 32,
+          insetPadding: const EdgeInsets.all(32),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8))),
+          child: Container(
+            padding: const EdgeInsets.only(
+              top: 10,
+              left: 16,
+              right: 16,
+            ),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).colorScheme.surface,
+                  blurRadius: 16,
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "About Us",
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Text(
+                    "This product is a demo of an e-commerce baby shop app. It is not certified and is for educational purposes only.",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "Okay",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 }

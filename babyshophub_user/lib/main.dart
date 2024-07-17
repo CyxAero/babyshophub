@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:wiredash/wiredash.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,11 +51,15 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'BabyShopHub',
-            theme: themeProvider.themeData,
-            home: const AuthCheck(),
+          return Wiredash(
+             projectId: 'babyshophub-gxx93v1',
+            secret: 'R9nqP0ftC8uyhwQVIvf-x6-L_hiPHCBp',
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'BabyShopHub',
+              theme: themeProvider.themeData,
+              home: const AuthCheck(),
+            ),
           );
         },
       ),
