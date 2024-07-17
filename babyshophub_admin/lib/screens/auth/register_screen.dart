@@ -1,10 +1,12 @@
 import 'package:babyshophub_admin/models/user_model.dart';
+import 'package:babyshophub_admin/providers/user_provider.dart';
 import 'package:babyshophub_admin/screens/dashboard/main_app.dart';
 import 'package:babyshophub_admin/services/auth_service.dart';
 import 'package:babyshophub_admin/widgets/basic_appbar.dart';
 import 'package:babyshophub_admin/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -102,7 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: const BasicAppBar(),
+      appBar: const BasicAppBar(height: 80),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -229,47 +231,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
               onPressed: _isFormValid && _passwordsMatch
                   ? () async {
                       if (_formKey.currentState!.validate()) {
-                        UserModel? user =
-                            await AuthService().registerWithEmailAndPassword(
-                          _emailController.text,
-                          _passwordController.text,
-                          _usernameController.text,
-                          true,
-                        );
-
                         setState(() {
-                          _isLoading = false;
+                          _isLoading = true;
                         });
+                        try {
+                          final authService =
+                              Provider.of<AuthService>(context, listen: false);
+                          final userProvider =
+                              Provider.of<UserProvider>(context, listen: false);
 
-                        if (!context.mounted) return;
-
-                        if (user != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MainApp(
-                                user: user,
-                              ),
-                            ),
+                          UserModel? user =
+                              await authService.registerWithEmailAndPassword(
+                            _emailController.text,
+                            _passwordController.text,
+                            _usernameController.text,
+                            true, // isAdmin
                           );
-                          // Navigator.of(context)
-                          //     .pushReplacement(MaterialPageRoute(
-                          //   builder: (context) => MainApp(
-                          //     user: user,
-                          //   ),
-                          // ));
 
-                          CustomSnackBar.showCustomSnackbar(
-                            context,
-                            'User registered with Email and Password.',
-                            false,
-                          );
-                        } else {
+                          if (user != null) {
+                            await userProvider
+                                .refreshUser(); // Ensure UserProvider is updated
+                            if (!context.mounted) return;
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MainApp()),
+                            );
+                            CustomSnackBar.showCustomSnackbar(
+                              context,
+                              'User registered successfully.',
+                              false,
+                            );
+                          } else {
+                            throw Exception('Failed to register user');
+                          }
+                        } catch (e) {
                           CustomSnackBar.showCustomSnackbar(
                             context,
                             'Failed to register user. Please try again.',
                             true,
                           );
+                        } finally {
+                          setState(() {
+                            _isLoading = false;
+                          });
                         }
                       }
                     }
@@ -329,40 +334,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 setState(() {
                   _isLoading = true;
                 });
+                try {
+                  final authService =
+                      Provider.of<AuthService>(context, listen: false);
+                  final userProvider =
+                      Provider.of<UserProvider>(context, listen: false);
 
-                UserModel? user = await AuthService().signInWithGoogle();
+                  UserModel? user = await authService.signInWithGoogle();
 
-                setState(() {
-                  _isLoading = false;
-                });
-
-                if (!context.mounted) return;
-
-                if (user != null) {
-                  CustomSnackBar.showCustomSnackbar(
-                    context,
-                    'User registered with Google Sign-In.',
-                    false,
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MainApp(
-                        user: user,
-                      ),
-                    ),
-                  );
-                  // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  //   builder: (context) => MainApp(
-                  //     user: user,
-                  //   ),
-                  // ));
-                } else {
+                  if (user != null) {
+                    await userProvider
+                        .refreshUser(); // Ensure UserProvider is updated
+                    if (!context.mounted) return;
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MainApp()),
+                    );
+                    CustomSnackBar.showCustomSnackbar(
+                      context,
+                      'Signed in with Google successfully.',
+                      false,
+                    );
+                  } else {
+                    throw Exception('Failed to sign in with Google');
+                  }
+                } catch (e) {
                   CustomSnackBar.showCustomSnackbar(
                     context,
                     'Failed to sign in with Google. Please try again.',
                     true,
                   );
+                } finally {
+                  setState(() {
+                    _isLoading = false;
+                  });
                 }
               },
         icon: _isLoading

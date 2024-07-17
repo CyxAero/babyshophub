@@ -10,34 +10,34 @@ class BabyShopHubTheme {
       // Display styles
       displayLarge: GoogleFonts.syne(
         fontSize: 57,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w600,
         color: textColor,
       ),
       displayMedium: GoogleFonts.syne(
         fontSize: 45,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         color: textColor,
       ),
       displaySmall: GoogleFonts.syne(
         fontSize: 36,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         color: textColor,
       ),
 
       // Headline styles
       headlineLarge: GoogleFonts.syne(
         fontSize: 32,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
         color: textColor,
       ),
       headlineMedium: GoogleFonts.syne(
         fontSize: 28,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
         color: textColor,
       ),
       headlineSmall: GoogleFonts.syne(
         fontSize: 24,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
         color: textColor,
       ),
 
@@ -120,11 +120,14 @@ class BabyShopHubTheme {
       scaffoldBackgroundColor: colorScheme.white2,
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(20),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: colorScheme.primary),
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            width: 1.5,
+            color: colorScheme.primary,
+          ),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -161,11 +164,14 @@ class BabyShopHubTheme {
       scaffoldBackgroundColor: colorScheme.black1,
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(20),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: colorScheme.primary),
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            width: 1.5,
+            color: colorScheme.primary,
+          ),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(

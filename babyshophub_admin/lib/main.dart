@@ -1,6 +1,9 @@
 import 'package:babyshophub_admin/firebase_options.dart';
+import 'package:babyshophub_admin/providers/product_provider.dart';
+import 'package:babyshophub_admin/providers/user_provider.dart';
 import 'package:babyshophub_admin/screens/auth/auth_check.dart';
 import 'package:babyshophub_admin/services/auth_service.dart';
+import 'package:babyshophub_admin/services/review_service.dart';
 import 'package:babyshophub_admin/theme/theme_provider.dart';
 import 'package:wiredash/wiredash.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,12 +34,7 @@ Future<void> main() async {
   // ?Connecting to firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -47,7 +45,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<AuthService>(create: (_) => AuthService()),
+        Provider<ReviewService>(create: (_) => ReviewService()),
+        ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) {
@@ -66,34 +67,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return Builder(
-//       builder: (context) {
-//         final brightness = MediaQuery.of(context).platformBrightness;
-//         const theme = BabyShopHubTheme();
-
-//         return MaterialApp(
-//           debugShowCheckedModeBanner: false,
-//           title: 'BabyShopHub Admin',
-//           theme: theme.lightTheme,
-//           darkTheme: theme.darkTheme,
-//           themeMode:
-//               brightness == Brightness.light ? ThemeMode.light : ThemeMode.dark,
-//           home: const GettingStarted(),
-//         );
-
-//       },
-//     );
-//   }
-// }
-
-
-// DONE: Connect to firebase backend
-// TODO: Create main app and connect to firebase backend
-// TODO: Initialize git

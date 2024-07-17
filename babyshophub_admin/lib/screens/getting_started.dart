@@ -28,7 +28,10 @@ class GettingStarted extends StatelessWidget {
                   child: Center(
                     child: Text(
                       'BabyShopHub',
-                      style: Theme.of(context).textTheme.displayMedium,
+                      style:
+                          Theme.of(context).textTheme.displayMedium?.copyWith(
+                                fontSize: 40,
+                              ),
                     ),
                   ),
                 ),

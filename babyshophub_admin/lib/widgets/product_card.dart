@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
@@ -14,15 +15,30 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Debug log for the image URL
+    print('\n\nImage URL: $imageUrl\n\n');
+
     return Card(
       clipBehavior: Clip.antiAlias,
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            imageUrl,
-            fit: BoxFit.cover,
-          ),
+          imageUrl.startsWith('http')
+              ? CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  placeholder: (context, url) =>
+                      const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) =>
+                      const Center(child: Text('Failed to load image')),
+                )
+              : Image.asset(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
+          // *Favourite button
           Positioned(
             top: 8,
             right: 8,
@@ -33,6 +49,7 @@ class ProductCard extends StatelessWidget {
               },
             ),
           ),
+          // *Linear Gradient
           Positioned(
             left: 0,
             right: 0,

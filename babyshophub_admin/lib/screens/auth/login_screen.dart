@@ -5,6 +5,7 @@ import 'package:babyshophub_admin/widgets/basic_appbar.dart';
 import 'package:babyshophub_admin/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -48,51 +49,43 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  // MARK: Sign in method
   Future<void> _signIn(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
 
-      UserModel? user = await AuthService().signInWithEmailAndPassword(
-        _emailController.text,
-        _passwordController.text,
-      );
+      try {
+        UserModel? user = await Provider.of<AuthService>(context, listen: false)
+            .signInWithEmailAndPassword(
+                _emailController.text, _passwordController.text);
 
-      setState(() {
-        _isLoading = false;
-      });
+        if (user != null) {
+          if (!context.mounted) return;
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const MainApp()),
+          );
 
-      if (!context.mounted) return;
-
-      if (user != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MainApp(
-              user: user,
-            ),
-          ),
-        );
-        // Navigator.of(context).pushReplacement(
-        //   MaterialPageRoute(
-        //     builder: (context) => MainApp(
-        //       user: user,
-        //     ),
-        //   ),
-        // );
-
+          CustomSnackBar.showCustomSnackbar(
+            context,
+            'User logged in successfully.',
+            false,
+          );
+        } else {
+          throw Exception('Failed to log in');
+        }
+      } catch (e) {
         CustomSnackBar.showCustomSnackbar(
           context,
-          'User logged in with Email and Password.',
-          false,
-        );
-      } else {
-        CustomSnackBar.showCustomSnackbar(
-          context,
-          'Failed to log in user. Please try again.',
+          'Failed to log in. Please try again.',
           true,
         );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
     }
   }
@@ -110,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: const BasicAppBar(),
+      appBar: const BasicAppBar(height: 80),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -243,6 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  // MARK: Google Log in
   Widget _buildGoogleLogInButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -274,9 +268,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MainApp(
-                        user: user,
-                      ),
+                      builder: (context) => const MainApp(),
                     ),
                   );
                   // Navigator.of(context).pushReplacement(MaterialPageRoute(
