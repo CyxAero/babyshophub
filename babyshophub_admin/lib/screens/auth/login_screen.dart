@@ -108,7 +108,6 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-            // padding: const EdgeInsets.fromLTRB(24, 20, 24, 40),
             child: Column(
               children: [
                 _buildTitleSection(context),
@@ -154,10 +153,12 @@ class _LoginScreenState extends State<LoginScreen> {
             controller: _emailController,
             focusNode: _emailFocusNode,
             keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Email",
               hintText: "johnsmith@gmail.com",
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -170,9 +171,11 @@ class _LoginScreenState extends State<LoginScreen> {
           TextFormField(
             controller: _passwordController,
             keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Password",
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
             ),
             obscureText: true,
             validator: (value) {
@@ -262,7 +265,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 if (user != null) {
                   CustomSnackBar.showCustomSnackbar(
                     context,
-                    'User logged in with Google Sign-In.',
+                    'User logged in with Google.',
                     false,
                   );
                   Navigator.push(
@@ -271,15 +274,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       builder: (context) => const MainApp(),
                     ),
                   );
-                  // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  //   builder: (context) => MainApp(
-                  //     user: user,
-                  //   ),
-                  // ));
                 } else {
                   CustomSnackBar.showCustomSnackbar(
                     context,
-                    'Failed to sign in with Google. Please try again.',
+                    'Failed to log in with Google. Please try again.',
                     true,
                   );
                 }

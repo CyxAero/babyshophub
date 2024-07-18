@@ -1,7 +1,8 @@
-import 'package:BabyShopHub/models/user_model.dart';
+import 'dart:async';
+
+import 'package:BabyShopHub/providers/user_provider.dart';
 import 'package:BabyShopHub/screens/dashboard/main_app.dart';
 import 'package:BabyShopHub/screens/getting_started.dart';
-import 'package:BabyShopHub/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,21 +11,36 @@ class AuthCheck extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
-
-    return FutureBuilder<UserModel?>(
-      future: authService.currentUser(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        } else if (snapshot.hasData) {
-          UserModel user = snapshot.data!;
-          return MainApp(user: user); // Pass the user object
-        } else {
-          return const GettingStarted();
-        }
+    return Consumer<UserProvider>(
+      builder: (context, userProvider, _) {
+        return FutureBuilder(
+          future: userProvider.initUser().timeout(
+            const Duration(seconds: 10),
+            onTimeout: () {
+              throw TimeoutException('User initialization timed out');
+            },
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+            } else if (snapshot.hasError) {
+              return Scaffold(
+                body: Center(
+                  child: Text('Error: ${snapshot.error}'),
+                ),
+              );
+            } else {
+              // Check if the user is initialized
+              if (userProvider.user != null) {
+                return const MainApp();
+              } else {
+                return const GettingStarted();
+              }
+            }
+          },
+        );
       },
     );
   }

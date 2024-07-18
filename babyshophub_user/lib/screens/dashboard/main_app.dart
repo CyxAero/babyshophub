@@ -1,14 +1,10 @@
-import 'package:BabyShopHub/models/user_model.dart';
-import 'package:BabyShopHub/screens/dashboard/dashboard_page.dart';
 import 'package:BabyShopHub/screens/saved/saved_products_page.dart';
 import 'package:BabyShopHub/screens/settings/settings_page.dart';
 import 'package:BabyShopHub/screens/shop/shop_page.dart';
 import 'package:flutter/material.dart';
 
 class MainApp extends StatefulWidget {
-  final UserModel user;
-
-  const MainApp({super.key, required this.user});
+  const MainApp({super.key});
 
   @override
   State<MainApp> createState() => _MainAppState();
@@ -23,11 +19,10 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     super.initState();
     pages.addAll([
-      DashboardPage(user: widget.user),
-      ShopPage(user: widget.user),
+      const ShopPage(),
       // CartPage(user: widget.user),
-      SavedProductsPage(user: widget.user),
-      SettingsPage(user: widget.user),
+      const SavedProductsPage(),
+      const SettingsPage(),
     ]);
   }
 

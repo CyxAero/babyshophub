@@ -1,10 +1,12 @@
 import 'package:BabyShopHub/models/user_model.dart';
+import 'package:BabyShopHub/providers/user_provider.dart';
 import 'package:BabyShopHub/screens/dashboard/main_app.dart';
 import 'package:BabyShopHub/services/auth_service.dart';
 import 'package:BabyShopHub/widgets/basic_appbar.dart';
 import 'package:BabyShopHub/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -101,7 +103,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BasicAppBar(height: 120),
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: const BasicAppBar(height: 80),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -150,10 +153,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           TextFormField(
             controller: _usernameController,
             keyboardType: TextInputType.name,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Username",
               hintText: "JSmith",
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -167,10 +172,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: _emailController,
             focusNode: _emailFocusNode,
             keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Email",
               hintText: "johnsmith@gmail.com",
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -184,9 +191,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: _passwordController,
             focusNode: _passwordFocusNode,
             keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Password",
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
             ),
             obscureText: true,
             validator: (value) {
@@ -202,7 +211,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
               labelText: "Confirm Password",
-              border: const OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
               errorText: !_passwordsMatch ? 'Passwords do not match' : null,
             ),
             obscureText: true,
@@ -228,42 +239,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
               onPressed: _isFormValid && _passwordsMatch
                   ? () async {
                       if (_formKey.currentState!.validate()) {
-                        UserModel? user =
-                            await AuthService().registerWithEmailAndPassword(
-                          _emailController.text,
-                          _passwordController.text,
-                          _usernameController.text,
-                          true,
-                        );
-
                         setState(() {
-                          _isLoading = false;
+                          _isLoading = true;
                         });
+                        try {
+                          final authService =
+                              Provider.of<AuthService>(context, listen: false);
+                          final userProvider =
+                              Provider.of<UserProvider>(context, listen: false);
 
-                        if (!context.mounted) return;
-
-                        if (user != null) {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MainApp(
-                                user: user,
-                              ),
-                            ),
-                            (route) => false,
+                          UserModel? user =
+                              await authService.registerWithEmailAndPassword(
+                            _emailController.text,
+                            _passwordController.text,
+                            _usernameController.text,
+                            false, // isAdmin
                           );
 
-                          CustomSnackBar.showCustomSnackbar(
-                            context,
-                            'User registered with Email and Password.',
-                            false,
-                          );
-                        } else {
+                          if (user != null) {
+                            await userProvider
+                                .refreshUser(); // Ensure UserProvider is updated
+                            if (!context.mounted) return;
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MainApp()),
+                            );
+                            CustomSnackBar.showCustomSnackbar(
+                              context,
+                              'User registered successfully.',
+                              false,
+                            );
+                          } else {
+                            throw Exception('Failed to register user');
+                          }
+                        } catch (e) {
                           CustomSnackBar.showCustomSnackbar(
                             context,
                             'Failed to register user. Please try again.',
                             true,
                           );
+                        } finally {
+                          setState(() {
+                            _isLoading = false;
+                          });
                         }
                       }
                     }
@@ -323,36 +342,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 setState(() {
                   _isLoading = true;
                 });
+                try {
+                  final authService =
+                      Provider.of<AuthService>(context, listen: false);
+                  final userProvider =
+                      Provider.of<UserProvider>(context, listen: false);
 
-                UserModel? user = await AuthService().signInWithGoogle();
+                  UserModel? user = await authService.signInWithGoogle();
 
-                setState(() {
-                  _isLoading = false;
-                });
-
-                if (!context.mounted) return;
-
-                if (user != null) {
+                  if (user != null) {
+                    await userProvider
+                        .refreshUser(); // Ensure UserProvider is updated
+                    if (!context.mounted) return;
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MainApp()),
+                    );
+                    CustomSnackBar.showCustomSnackbar(
+                      context,
+                      'Logged in with Google successfully.',
+                      false,
+                    );
+                  } else {
+                    throw Exception('Failed to log in with Google');
+                  }
+                } catch (e) {
                   CustomSnackBar.showCustomSnackbar(
                     context,
-                    'User registered with Google Sign-In.',
-                    false,
-                  );
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MainApp(
-                        user: user,
-                      ),
-                    ),
-                    (route) => false,
-                  );
-                } else {
-                  CustomSnackBar.showCustomSnackbar(
-                    context,
-                    'Failed to sign in with Google. Please try again.',
+                    'Failed to log in with Google. Please try again.',
                     true,
                   );
+                } finally {
+                  setState(() {
+                    _isLoading = false;
+                  });
                 }
               },
         icon: _isLoading

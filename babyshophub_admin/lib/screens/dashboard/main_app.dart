@@ -27,7 +27,7 @@ class _MainAppState extends State<MainApp> {
       const ProductsPage(),
       const OrdersPage(),
       const UsersPage(),
-      SettingsPage(),
+      const SettingsPage(),
     ]);
   }
 

@@ -1,35 +1,25 @@
 import 'package:BabyShopHub/models/user_model.dart';
+import 'package:BabyShopHub/services/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final Logger _logger = Logger();
+  final UserService _userService = UserService();
 
   Future<UserModel?> signInWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
+      String email, String password) async {
     try {
+      _logger.i('Attempting to sign in with email: $email');
       UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      User? user = result.user;
-      if (user != null) {
-        DocumentSnapshot doc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
-        UserModel userModel = UserModel.fromFirestore(doc);
-        await saveUserToPreferences(userModel); // Save user to preferences
-        return userModel;
-      }
-      return null;
+      _logger.i('Sign in successful for user: ${result.user?.uid}');
+      return await _userService.getUserById(result.user!.uid);
     } catch (e) {
       _logger.e("Error signing in with email and password: $e");
       return null;
@@ -47,27 +37,12 @@ class AuthService {
         email: email,
         password: password,
       );
-      User? user = result.user;
-
-      if (user != null) {
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-          'email': email,
-          'username': username,
-          'profileImage': '',
-          'addresses': [],
-          'paymentMethods': [],
-          'isAdmin': isAdmin,
-        });
-
-        DocumentSnapshot doc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
-        UserModel userModel = UserModel.fromFirestore(doc);
-        await saveUserToPreferences(userModel); // Save user to preferences
-        return userModel;
-      }
-      return null;
+      return await _userService.createUser(
+        result.user!.uid,
+        email,
+        username,
+        isAdmin,
+      );
     } catch (e) {
       _logger.e("Error registering with email and password: $e");
       return null;
@@ -75,18 +50,10 @@ class AuthService {
   }
 
   Future<UserModel?> signInWithGoogle() async {
-    _logger.d('signInWithGoogle: Start');
-
     try {
-      _logger.d('signInWithGoogle: Initiating Google sign-in');
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return null;
 
-      if (googleUser == null) {
-        _logger.w('signInWithGoogle: Google Sign-In canceled by user');
-        return null;
-      }
-
-      _logger.d('signInWithGoogle: Google Sign-In successful');
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
@@ -94,68 +61,23 @@ class AuthService {
         idToken: googleAuth.idToken,
       );
 
-      _logger.d('signInWithGoogle: Signing in with Google credentials');
       UserCredential result = await _auth.signInWithCredential(credential);
-      User? user = result.user;
 
       if (result.additionalUserInfo?.isNewUser ?? false) {
-        _logger.d(
-            'signInWithGoogle: New Google user, creating Firestore document');
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user?.uid)
-            .set({
-          'email': user?.email,
-          'username':
-              googleUser.displayName ?? '', // Save username from Google account
-          'profileImage': user?.photoURL,
-          'addresses': [],
-          'paymentMethods': [],
-          'isAdmin': false,
-        });
+        return await _userService.createUser(
+          result.user!.uid,
+          result.user!.email!,
+          googleUser.displayName ?? '',
+          false, // Disable admin privilege for user
+          profileImage: result.user!.photoURL,
+        );
+      } else {
+        return await _userService.getUserById(result.user!.uid);
       }
-
-      if (user != null) {
-        DocumentSnapshot doc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
-        UserModel userModel = UserModel.fromFirestore(doc);
-        await saveUserToPreferences(userModel); // Save user to preferences
-        return userModel;
-      }
-      return null;
-    } catch (e, stacktrace) {
-      _logger.e('Error in signInWithGoogle: $e\n$stacktrace');
+    } catch (e) {
+      _logger.e('Error in signInWithGoogle: $e');
       return null;
     }
-  }
-
-  // In AuthService class:
-  Future<void> saveUserToPreferences(UserModel user) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('userId', user.userId);
-    await prefs.setString('email', user.email);
-    await prefs.setString('username', user.username ?? '');
-    // Add other user properties as needed
-  }
-
-  Future<UserModel?> loadUserFromPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? userId = prefs.getString('userId');
-    String? email = prefs.getString('email');
-    String? username = prefs.getString('username');
-    // Load other user properties as needed
-
-    if (userId != null && email != null) {
-      return UserModel(
-        userId: userId,
-        email: email,
-        username: username,
-        isAdmin: false, // or load the correct value
-      );
-    }
-    return null;
   }
 
   Future<void> resetPassword(String email) async {
@@ -175,28 +97,14 @@ class AuthService {
     }
   }
 
-  Future<void> deleteUser(UserModel user) async {
+  Future<void> deleteUser() async {
     try {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.userId)
-          .delete();
+      await _userService.deleteUser(_auth.currentUser!.uid);
       await _auth.currentUser?.delete();
     } catch (e) {
       _logger.e("Error deleting user: $e");
     }
   }
 
-  // Method to get current user
-  Future<UserModel?> currentUser() async {
-    User? user = _auth.currentUser;
-    if (user != null) {
-      DocumentSnapshot doc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
-      return UserModel.fromFirestore(doc);
-    }
-    return null;
-  }
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
 }
