@@ -1,5 +1,6 @@
 import 'package:BabyShopHub/screens/saved/saved_products_page.dart';
 import 'package:BabyShopHub/screens/settings/settings_page.dart';
+import 'package:BabyShopHub/screens/shop/search_page.dart';
 import 'package:BabyShopHub/screens/shop/shop_page.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ class _MainAppState extends State<MainApp> {
     super.initState();
     pages.addAll([
       const ShopPage(),
-      // CartPage(user: widget.user),
+      const SearchPage(),
       const SavedProductsPage(),
       const SettingsPage(),
     ]);
@@ -53,23 +54,18 @@ class _MainAppState extends State<MainApp> {
           },
           destinations: const [
             NavigationDestination(
-              icon: Icon(Icons.dashboard_outlined),
-              selectedIcon: Icon(Icons.dashboard_rounded),
-              label: 'Dashboard',
-            ),
-            NavigationDestination(
               icon: Icon(Icons.shopping_bag_outlined),
               selectedIcon: Icon(Icons.shopping_bag_rounded),
               label: 'Shop',
             ),
-            // NavigationDestination(
-            //   icon: Icon(Icons.shopping_cart_outlined),
-            //   selectedIcon: Icon(Icons.shopping_cart_rounded),
-            //   label: 'Cart',
-            // ),
             NavigationDestination(
-              icon: Icon(Icons.saved_search_outlined),
-              selectedIcon: Icon(Icons.saved_search_rounded),
+              icon: Icon(Icons.search_outlined),
+              selectedIcon: Icon(Icons.search_rounded),
+              label: 'Search',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.bookmark_outline_rounded),
+              selectedIcon: Icon(Icons.bookmark_rounded),
               label: 'Saved',
             ),
             NavigationDestination(
