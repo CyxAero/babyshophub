@@ -9,21 +9,21 @@ import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
-class AddProductBottomSheet extends StatefulWidget {
+class ProductBottomSheet extends StatefulWidget {
   final VoidCallback onProductAdded;
   final ProductModel? initialProduct;
 
-  const AddProductBottomSheet({
+  const ProductBottomSheet({
     super.key,
     required this.onProductAdded,
     this.initialProduct,
   });
 
   @override
-  State<AddProductBottomSheet> createState() => _AddProductBottomSheetState();
+  State<ProductBottomSheet> createState() => _ProductBottomSheetState();
 }
 
-class _AddProductBottomSheetState extends State<AddProductBottomSheet> {
+class _ProductBottomSheetState extends State<ProductBottomSheet> {
   final _formKey = GlobalKey<FormState>();
   final List<XFile> _images = [];
   final List<String> _categories = [];
@@ -31,6 +31,7 @@ class _AddProductBottomSheetState extends State<AddProductBottomSheet> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _stockController = TextEditingController();
+  final TextEditingController _newCategoryController = TextEditingController();
 
   @override
   initState() {
@@ -245,6 +246,7 @@ class _AddProductBottomSheetState extends State<AddProductBottomSheet> {
     );
   }
 
+  // MARK: Categories Section
   Widget _buildCategoriesSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -271,6 +273,7 @@ class _AddProductBottomSheetState extends State<AddProductBottomSheet> {
         ),
         const SizedBox(height: 8),
         _buildAddCategoryButton(),
+        _buildNewCategoryInput(),
         if (_categories.isEmpty)
           Text(
             'Please add at least one category',
@@ -287,7 +290,7 @@ class _AddProductBottomSheetState extends State<AddProductBottomSheet> {
         fillColor: Theme.of(context).colorScheme.surface.withAlpha(223),
         labelText: 'Add category',
       ),
-      items: ['Toys and games', 'Furniture', 'Electronics', 'Clothing']
+      items: ['Toys and games', 'Cutlery', 'Electronics', 'Clothing']
           .map((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -301,6 +304,32 @@ class _AddProductBottomSheetState extends State<AddProductBottomSheet> {
           });
         }
       },
+      enableFeedback: true,
+    );
+  }
+
+  Widget _buildNewCategoryInput() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: TextFormField(
+        controller: _newCategoryController,
+        decoration: InputDecoration(
+          labelText: 'Add new category',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          filled: true,
+          fillColor: Theme.of(context).colorScheme.surface.withAlpha(223),
+        ),
+        onFieldSubmitted: (value) {
+          if (value.isNotEmpty && !_categories.contains(value)) {
+            setState(() {
+              _categories.add(value);
+              _newCategoryController.clear();
+            });
+          }
+        },
+      ),
     );
   }
 
@@ -350,89 +379,79 @@ class _AddProductBottomSheetState extends State<AddProductBottomSheet> {
     });
   }
 
-  // void _saveProduct() {
-  //   if (_formKey.currentState!.validate() &&
-  //       _images.isNotEmpty &&
-  //       _categories.isNotEmpty) {
-  //     // TODO: Implement save logic
-  //     Navigator.of(context).pop();
-  //   }
-  // }
-
   // MARK: Save Product
   void _saveProduct() async {
-    if (_formKey.currentState!.validate() &&
-        _images.isNotEmpty &&
-        _categories.isNotEmpty) {
-      final productService = ProductService();
-      final List<String> imageUrls = [];
+    final productService = ProductService();
+    final List<String> imageUrls = [];
 
-      for (var image in _images) {
-        try {
-          final url = await productService.uploadImage(File(image.path));
-          imageUrls.add(url);
-        } catch (e) {
-          Logger().e("Failed to upload image: $e");
-          CustomSnackBar.showCustomSnackbar(
-            context,
-            'Failed to upload image. Please try again.',
-            true,
-          );
-          return; // Exit the function if any image upload fails
-        }
-      }
-
-      // Log the price input for debugging
-      Logger().d("Price input: ${_priceController.text}");
-
-      // Trim and sanitize the price input
-      String priceInput = _priceController.text.trim();
-      double? parsedPrice = double.tryParse(priceInput);
-
-      if (parsedPrice == null) {
+    for (var image in _images) {
+      try {
+        final url = await productService.uploadImage(File(image.path));
+        imageUrls.add(url);
+      } catch (e) {
+        Logger().e("Failed to upload image: $e");
+        if (!mounted) return;
         CustomSnackBar.showCustomSnackbar(
           context,
-          'Invalid price. Please enter a valid number.',
+          'Failed to upload image. Please try again.',
           true,
         );
-        return; // Exit if the price is not valid
-      }
-
-      final product = ProductModel(
-        productId: '',
-        name: _nameController.text,
-        description: _descriptionController.text,
-        price: parsedPrice,
-        images: imageUrls,
-        categories: _categories,
-        stock: int.tryParse(_stockController.text) ?? 0,
-      );
-
-      if (mounted) {
-        try {
-          await productService.addProduct(product);
-          widget.onProductAdded(); // Trigger a refresh
-          CustomSnackBar.showCustomSnackbar(
-            context,
-            'Product added successfully!',
-            false,
-          );
-          Navigator.of(context).pop(); // Close the bottom sheet
-        } catch (e) {
-          Logger().e("Failed to add product: $e");
-          CustomSnackBar.showCustomSnackbar(
-            context,
-            'Failed to add product. Please try again.',
-            true,
-          );
-        }
-      } else {
-        CustomSnackBar.showCustomSnackbar(
-          context,
-          'Please complete all fields and add at least one image and category.',
-          true,
-        );
+        return; // Exit the function if any image upload fails
       }
     }
+
+    // Log the price input for debugging
+    Logger().d("Price input: ${_priceController.text}");
+
+    // Trim and sanitize the price input
+    String priceInput = _priceController.text.trim();
+    double? parsedPrice = double.tryParse(priceInput);
+
+    if (parsedPrice == null && mounted) {
+      CustomSnackBar.showCustomSnackbar(
+        context,
+        'Invalid price. Please enter a valid number.',
+        true,
+      );
+      return; // Exit if the price is not valid
+    }
+
+    final product = ProductModel(
+      productId: '',
+      name: _nameController.text,
+      description: _descriptionController.text,
+      price: parsedPrice!,
+      images: imageUrls,
+      categories: _categories,
+      stock: int.tryParse(_stockController.text) ?? 0,
+    );
+
+    try {
+      await productService.addProduct(product);
+      widget.onProductAdded(); // Trigger a refresh
+      if (!mounted) return;
+      CustomSnackBar.showCustomSnackbar(
+        context,
+        'Product added successfully!',
+        false,
+      );
+      Navigator.of(context).pop(); // Close the bottom sheet
+    } catch (e) {
+      Logger().e("Failed to add product: $e");
+      if (!mounted) return;
+      CustomSnackBar.showCustomSnackbar(
+        context,
+        'Failed to add product. Please try again.',
+        true,
+      );
+    }
+  }
+
+  void _showErrorMessage() {
+    CustomSnackBar.showCustomSnackbar(
+      context,
+      'Please complete all fields and add at least one image and category.',
+      true,
+    );
   }
 }
