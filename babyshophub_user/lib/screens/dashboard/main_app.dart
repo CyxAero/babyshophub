@@ -1,5 +1,4 @@
 import 'package:BabyShopHub/models/user_model.dart';
-import 'package:BabyShopHub/screens/cart/cart_page.dart';
 import 'package:BabyShopHub/screens/dashboard/dashboard_page.dart';
 import 'package:BabyShopHub/screens/saved/saved_products_page.dart';
 import 'package:BabyShopHub/screens/settings/settings_page.dart';
