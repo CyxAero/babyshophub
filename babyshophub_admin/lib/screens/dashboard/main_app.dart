@@ -1,5 +1,4 @@
 import 'package:babyshophub_admin/screens/dashboard/dashboard_page.dart';
-import 'package:babyshophub_admin/models/user_model.dart';
 import 'package:babyshophub_admin/providers/user_provider.dart';
 import 'package:babyshophub_admin/screens/orders/orders_page.dart';
 import 'package:babyshophub_admin/screens/products/products_page.dart';
@@ -24,7 +23,7 @@ class _MainAppState extends State<MainApp> {
     super.initState();
     // Initialize pages with the other pages that don't require user
     pages = [
-      const DashboardPage(),
+      DashboardPage(),
       const ProductsPage(),
       const OrdersPage(),
       const UsersPage(),

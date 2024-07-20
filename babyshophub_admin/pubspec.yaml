@@ -79,6 +79,16 @@ flutter:
     - assets/images/baby.webp
     - assets/images/watch.jpeg
     - assets/images/toys.jpeg
+    - assets/images/babyclothes.png
+    - assets/images/babyfood.png
+    - assets/images/diapers.png
+    - assets/images/babytoys.png
+    - assets/images/cartoy.png
+    - assets/images/cloth(1).png
+    - assets/images/more.png
+    - assets/images/bottle(1).png
+    - assets/images/diapers(1).png
+
     - .env
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -5,10 +5,10 @@ import 'package:babyshophub_admin/widgets/title_appbar.dart';
 import 'package:babyshophub_admin/theme/theme_extension.dart';
 
 class UpdateProfileScreen extends StatelessWidget {
-  final UserModel user;
+  final UserModel? user;
 
   const UpdateProfileScreen({super.key, required this.user});
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +32,7 @@ class UpdateProfileScreen extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        user.username!.substring(0, 2).toUpperCase(),
+                        user?.username?.substring(0, 2).toUpperCase() ?? '??',
                         style: Theme.of(context).textTheme.headlineLarge,
                       ),
                     ),
@@ -69,74 +69,75 @@ class UpdateProfileScreen extends StatelessWidget {
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                         labelText: "Username",
-                        hintText: user.username ?? 'User',
+                        hintText: user?.username ?? 'User',
                         prefixIcon: const Icon(Icons.person),
-                    fillColor: const Color(0xFFF2F7EB),
-          filled: true,
-          labelStyle: const TextStyle(color: Colors.black),
-          hintStyle: const TextStyle(color: Colors.grey),
-          prefixIconColor: Colors.black,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(24),
-            borderSide: const BorderSide(color: Color(0xFFF2F7EB)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.blueAccent),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(24),
-            borderSide: const BorderSide(color: Color(0xFFF2F7EB)),
-          ),
-    contentPadding: const EdgeInsets.all(22.0),
-  ),
-  validator: (value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your email';
-    }
-    return null;
-  },
-  style: const TextStyle(color: Colors.black), // Text color
-),
+                        fillColor: const Color(0xFFF2F7EB),
+                        filled: true,
+                        labelStyle: const TextStyle(color: Colors.black),
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        prefixIconColor: Colors.black,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                          borderSide: const BorderSide(color: Color(0xFFF2F7EB)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.blueAccent),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                          borderSide: const BorderSide(color: Color(0xFFF2F7EB)),
+                        ),
+                        contentPadding: const EdgeInsets.all(22.0),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your username';
+                        }
+                        return null;
+                      },
+                      style: const TextStyle(color: Colors.black), // Text color
+                    ),
                     const SizedBox(height: 16),
-             TextFormField(
-  keyboardType: TextInputType.emailAddress,
-  decoration: InputDecoration(
-    labelText: "Email",
-    hintText: user.email,
-    prefixIcon: const Icon(Icons.email),
-     fillColor: const Color(0xFFF2F7EB),
-          filled: true,
-          labelStyle: const TextStyle(color: Colors.black),
-          hintStyle: const TextStyle(color: Colors.grey),
-          prefixIconColor: Colors.black,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(24),
-            borderSide: const BorderSide(color: Color(0xFFF2F7EB)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.blueAccent),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(24),
-            borderSide: const BorderSide(color: Color(0xFFF2F7EB)),
-          ),
-    contentPadding: const EdgeInsets.all(22.0),
-  ),
-  validator: (value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your email';
-    }
-    return null;
-  },
-  style: const TextStyle(color: Colors.black), // Text color
-),
-
+                    TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        labelText: "Email",
+                        hintText: user?.email ?? 'user@example.com',
+                        prefixIcon: const Icon(Icons.email),
+                        fillColor: const Color(0xFFF2F7EB),
+                        filled: true,
+                        labelStyle: const TextStyle(color: Colors.black),
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        prefixIconColor: Colors.black,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                          borderSide: const BorderSide(color: Color(0xFFF2F7EB)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.blueAccent),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                          borderSide: const BorderSide(color: Color(0xFFF2F7EB)),
+                        ),
+                        contentPadding: const EdgeInsets.all(22.0),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        return null;
+                      },
+                      style: const TextStyle(color: Colors.black), // Text color
+                    ),
                     const SizedBox(height: 48),
                     // *submit button
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        // Handle save action
+                      },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.all(22),
                         elevation: 0,
@@ -145,26 +146,25 @@ class UpdateProfileScreen extends StatelessWidget {
                       ),
                       child: Text(
                         'Save',
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: Theme.of(context).colorScheme.black2,
-                                ),
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.black2,
+                            ),
                       ),
                     ),
                     const SizedBox(height: 24),
-                        ElevatedButton(                          
-                          onPressed: () { 
-                            
-                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.redAccent.withOpacity(0.1),
-                            elevation: 0,
-                            foregroundColor: Colors.red,
-                            shape: const StadiumBorder(),
-                            side: BorderSide.none
-                            ),
-                          child: const Text("Delete Profile"),
-                          ),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Handle delete action
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent.withOpacity(0.1),
+                        elevation: 0,
+                        foregroundColor: Colors.red,
+                        shape: const StadiumBorder(),
+                        side: BorderSide.none,
+                      ),
+                      child: const Text("Delete Profile"),
+                    ),
                   ],
                 ),
               ),

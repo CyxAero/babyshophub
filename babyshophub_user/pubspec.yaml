@@ -37,6 +37,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.1.0
+  get: ^4.6.6
   google_fonts: ^6.2.1
   google_sign_in: ^6.2.1
   logger: ^2.3.0
@@ -65,6 +66,15 @@ flutter:
     - assets/images/baby.avif
     - assets/images/baby.jpg
     - assets/images/baby.webp
+    - assets/images/babyclothes.png
+    - assets/images/babyfood.png
+    - assets/images/diapers.png
+    - assets/images/babytoys.png
+    - assets/images/cartoy.png
+    - assets/images/cloth(1).png
+    - assets/images/more.png
+    - assets/images/bottle(1).png
+    - assets/images/diapers(1).png
     - .env
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

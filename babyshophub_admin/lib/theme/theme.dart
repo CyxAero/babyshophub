@@ -23,7 +23,7 @@ class BabyShopHubTheme {
         fontWeight: FontWeight.w600,
         color: textColor,
       ),
-
+  
       // Headline styles
       headlineLarge: GoogleFonts.syne(
         fontSize: 32,
