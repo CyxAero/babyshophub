@@ -2,6 +2,7 @@ import 'package:BabyShopHub/firebase_options.dart';
 import 'package:BabyShopHub/providers/user_provider.dart';
 import 'package:BabyShopHub/screens/auth/auth_check.dart';
 import 'package:BabyShopHub/services/auth_service.dart';
+import 'package:BabyShopHub/theme/theme.dart';
 import 'package:BabyShopHub/theme/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,8 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'BabyShopHub',
             theme: themeProvider.themeData,
+            darkTheme: const BabyShopHubTheme().darkTheme,
+            themeMode: themeProvider.themeMode,
             home: const AuthCheck(),
           );
         },

@@ -31,6 +31,7 @@ class GettingStarted extends StatelessWidget {
                       style:
                           Theme.of(context).textTheme.displayMedium?.copyWith(
                                 fontSize: 40,
+                                color: Theme.of(context).colorScheme.black2,
                               ),
                     ),
                   ),
@@ -68,7 +69,7 @@ class GettingStarted extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 8),
-                    
+
                     // *Log in button
                     SizedBox(
                       width: double.infinity,

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
-
   const SettingsPage({super.key});
 
   @override
@@ -16,7 +15,6 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    bool isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
     final user = Provider.of<UserProvider>(context).user;
 
@@ -110,16 +108,17 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     const SizedBox(height: 16),
                     _buildRoundedListItem(
-                        icon: Icons.edit,
-                        title: 'Edit profile',
-                        trailing: const Icon(Icons.chevron_right),
-                        isDarkMode: isDarkMode),
+                      context: context,
+                      icon: Icons.edit,
+                      title: 'Edit profile',
+                      trailing: const Icon(Icons.chevron_right),
+                    ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
+                      context: context,
                       icon: Icons.lock,
                       title: 'Change password',
                       trailing: const Icon(Icons.chevron_right),
-                      isDarkMode: isDarkMode,
                     ),
 
                     const SizedBox(height: 32),
@@ -131,30 +130,30 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     const SizedBox(height: 16),
                     _buildRoundedListItem(
-                        icon: Icons.dark_mode,
-                        title: 'Dark Theme',
-                        trailing: Switch(
-                          value: isDarkMode,
-                          onChanged: (bool value) {
-                            setState(() {
-                              isDarkMode = value;
-                            });
-                            themeProvider.toggleTheme(isDarkMode);
-                          },
-                        ),
-                        isDarkMode: isDarkMode),
+                      context: context,
+                      icon: Icons.dark_mode,
+                      title: 'Dark Theme',
+                      trailing: Switch(
+                        value: themeProvider.isDarkMode,
+                        onChanged: (bool value) {
+                          themeProvider.toggleTheme(value);
+                        },
+                      ),
+                    ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
-                        icon: Icons.info,
-                        title: 'About us',
-                        trailing: const Icon(Icons.chevron_right),
-                        isDarkMode: isDarkMode),
+                      context: context,
+                      icon: Icons.info,
+                      title: 'About us',
+                      trailing: const Icon(Icons.chevron_right),
+                    ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
-                        icon: Icons.contact_support,
-                        title: 'Contact us',
-                        trailing: const Icon(Icons.chevron_right),
-                        isDarkMode: isDarkMode),
+                      context: context,
+                      icon: Icons.contact_support,
+                      title: 'Contact us',
+                      trailing: const Icon(Icons.chevron_right),
+                    ),
 
                     // *Log out button
                     const SizedBox(height: 48),
@@ -185,11 +184,12 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildRoundedListItem({
+    required BuildContext context,
     required IconData icon,
     required String title,
     required Widget trailing,
-    required bool isDarkMode,
   }) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
         color: isDarkMode

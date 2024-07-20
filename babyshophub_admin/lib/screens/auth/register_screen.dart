@@ -2,11 +2,12 @@ import 'package:babyshophub_admin/models/user_model.dart';
 import 'package:babyshophub_admin/providers/user_provider.dart';
 import 'package:babyshophub_admin/screens/dashboard/main_app.dart';
 import 'package:babyshophub_admin/services/auth_service.dart';
+import 'package:babyshophub_admin/theme/theme_extension.dart';
 import 'package:babyshophub_admin/widgets/basic_appbar.dart';
 import 'package:babyshophub_admin/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:unicons/unicons.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -30,6 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isFormValid = false;
 
   bool _isLoading = false;
+  bool _isGoogleLoading = false;
 
   @override
   void initState() {
@@ -86,6 +88,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
           _passwordController.text == _confirmPasswordController.text;
       _isFormValid = _formKey.currentState?.validate() ?? false;
     });
+  }
+
+  // MARK: Register method
+  Future<void> _register(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        final authService = Provider.of<AuthService>(context, listen: false);
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+        UserModel? user = await authService.registerWithEmailAndPassword(
+          _emailController.text,
+          _passwordController.text,
+          _usernameController.text,
+          true, // isAdmin
+        );
+
+        if (user != null) {
+          await userProvider.refreshUser(); // Ensure UserProvider is updated
+          if (!context.mounted) return;
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const MainApp()),
+          );
+          CustomSnackBar.showCustomSnackbar(
+            context,
+            'Admin registered successfully.',
+            false,
+          );
+        } else {
+          throw Exception('Failed to register admin');
+        }
+      } catch (e) {
+        CustomSnackBar.showCustomSnackbar(
+          context,
+          'Failed to register admin. Please try again.',
+          true,
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -238,59 +286,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               onPressed: _isFormValid && _passwordsMatch
                   ? () async {
-                      if (_formKey.currentState!.validate()) {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        try {
-                          final authService =
-                              Provider.of<AuthService>(context, listen: false);
-                          final userProvider =
-                              Provider.of<UserProvider>(context, listen: false);
-
-                          UserModel? user =
-                              await authService.registerWithEmailAndPassword(
-                            _emailController.text,
-                            _passwordController.text,
-                            _usernameController.text,
-                            true, // isAdmin
-                          );
-
-                          if (user != null) {
-                            await userProvider
-                                .refreshUser(); // Ensure UserProvider is updated
-                            if (!context.mounted) return;
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const MainApp()),
-                            );
-                            CustomSnackBar.showCustomSnackbar(
-                              context,
-                              'User registered successfully.',
-                              false,
-                            );
-                          } else {
-                            throw Exception('Failed to register user');
-                          }
-                        } catch (e) {
-                          CustomSnackBar.showCustomSnackbar(
-                            context,
-                            'Failed to register user. Please try again.',
-                            true,
-                          );
-                        } finally {
-                          setState(() {
-                            _isLoading = false;
-                          });
-                        }
-                      }
+                      _register(context);
                     }
                   : null,
-              child: Text(
-                "Register",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+              child: _isLoading
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: SizedBox(
+                        height: 32,
+                        width: 32,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).colorScheme.white1,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Text(
+                        "Register",
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: Theme.of(context).colorScheme.black2,
+                            ),
+                      ),
+                    ),
             ),
           )
         ],
@@ -340,7 +361,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ? null
             : () async {
                 setState(() {
-                  _isLoading = true;
+                  _isGoogleLoading = true;
                 });
                 try {
                   final authService =
@@ -360,40 +381,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     );
                     CustomSnackBar.showCustomSnackbar(
                       context,
-                      'Logged in with Google successfully.',
+                      'Registered with Google successfully.',
                       false,
                     );
                   } else {
-                    throw Exception('Failed to log in with Google');
+                    throw Exception('Failed to register with Google');
                   }
                 } catch (e) {
                   CustomSnackBar.showCustomSnackbar(
                     context,
-                    'Failed to log in with Google. Please try again.',
+                    'Failed to register with Google. Please try again.',
                     true,
                   );
                 } finally {
                   setState(() {
-                    _isLoading = false;
+                    _isGoogleLoading = false;
                   });
                 }
               },
-        icon: _isLoading
-            ? const SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        icon: _isGoogleLoading
+            ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: SizedBox(
+                  height: 32,
+                  width: 32,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Theme.of(context).colorScheme.white1,
+                    ),
+                  ),
                 ),
               )
-            : const PhosphorIcon(PhosphorIconsBold.googleLogo),
-        label: _isLoading
-            ? const SizedBox.shrink()
-            : Text(
-                "",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+            : const Icon(UniconsLine.google, size: 32),
+        label: const Text(""),
       ),
     );
   }

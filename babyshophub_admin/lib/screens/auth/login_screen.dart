@@ -1,11 +1,12 @@
 import 'package:babyshophub_admin/models/user_model.dart';
 import 'package:babyshophub_admin/screens/dashboard/main_app.dart';
 import 'package:babyshophub_admin/services/auth_service.dart';
+import 'package:babyshophub_admin/theme/theme_extension.dart';
 import 'package:babyshophub_admin/widgets/basic_appbar.dart';
 import 'package:babyshophub_admin/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:unicons/unicons.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,6 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController _passwordController;
 
   late FocusNode _emailFocusNode;
+
+  bool _isFormValid = false;
 
   bool _isLoading = false;
   bool _isGoogleLoading = false;
@@ -40,12 +43,20 @@ class _LoginScreenState extends State<LoginScreen> {
         _validateEmail();
       }
     });
+
+    _validateForm();
   }
 
   void _validateEmail() {
     setState(() {
       // Trigger email validation
       _formKey.currentState?.validate();
+    });
+  }
+
+  void _validateForm() {
+    setState(() {
+      _isFormValid = _formKey.currentState?.validate() ?? false;
     });
   }
 
@@ -59,7 +70,9 @@ class _LoginScreenState extends State<LoginScreen> {
       try {
         UserModel? user = await Provider.of<AuthService>(context, listen: false)
             .signInWithEmailAndPassword(
-                _emailController.text, _passwordController.text);
+          _emailController.text,
+          _passwordController.text,
+        );
 
         if (user != null) {
           if (!context.mounted) return;
@@ -192,16 +205,33 @@ class _LoginScreenState extends State<LoginScreen> {
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 8),
               ),
-              onPressed: _isLoading
-                  ? null
-                  : () async {
+              onPressed: _isFormValid
+                  ? () async {
                       _signIn(context);
-                    },
+                    }
+                  : null,
               child: _isLoading
-                  ? const CircularProgressIndicator()
-                  : Text(
-                      "Log in",
-                      style: Theme.of(context).textTheme.titleLarge,
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: SizedBox(
+                        height: 32,
+                        width: 32,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).colorScheme.white1,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Text(
+                        "Log in",
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: Theme.of(context).colorScheme.black2,
+                            ),
+                      ),
                     ),
             ),
           )
@@ -283,24 +313,23 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
               },
         icon: _isGoogleLoading
-            ? const SizedBox(
-                height: 32,
-                width: 32,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: SizedBox(
+                  height: 32,
+                  width: 32,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Theme.of(context).colorScheme.white1,
+                    ),
+                  ),
                 ),
               )
-            : const PhosphorIcon(
-                PhosphorIconsBold.googleLogo,
-                size: 32,
+            : const Padding(
+                padding: EdgeInsets.symmetric(vertical: 4),
+                child: Icon(UniconsLine.google, size: 32),
               ),
-        // label: _isGoogleLoading
-        //     ? const SizedBox.shrink()
-        //     : Text(
-        //         "",
-        //         style: Theme.of(context).textTheme.titleLarge,
-        //       ),
         label: const Text(""),
       ),
     );

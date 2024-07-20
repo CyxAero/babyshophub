@@ -47,6 +47,7 @@ dependencies:
   provider: ^6.1.2
   shared_preferences: ^2.2.3
   smooth_page_indicator: ^1.2.0
+  unicons: ^2.1.2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
