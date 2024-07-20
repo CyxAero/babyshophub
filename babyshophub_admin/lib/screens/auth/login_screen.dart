@@ -284,8 +284,8 @@ class _LoginScreenState extends State<LoginScreen> {
               },
         icon: _isGoogleLoading
             ? const SizedBox(
-                height: 20,
-                width: 20,
+                height: 32,
+                width: 32,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
@@ -295,12 +295,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 PhosphorIconsBold.googleLogo,
                 size: 32,
               ),
-        label: _isGoogleLoading
-            ? const SizedBox.shrink()
-            : Text(
-                "",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+        // label: _isGoogleLoading
+        //     ? const SizedBox.shrink()
+        //     : Text(
+        //         "",
+        //         style: Theme.of(context).textTheme.titleLarge,
+        //       ),
+        label: const Text(""),
       ),
     );
   }

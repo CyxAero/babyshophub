@@ -186,7 +186,7 @@ class _ProductsPageState extends State<ProductsPage> {
                         name: product.name,
                         price: '\$${product.price.toStringAsFixed(2)}',
                         imageUrl: product.images.isNotEmpty
-                            ? product.images[0]
+                            ? product.images.elementAt(0)
                             : 'assets/images/placeholder.png',
                       ),
                       if (isSelected)
@@ -289,13 +289,15 @@ class _ProductsPageState extends State<ProductsPage> {
 
     try {
       for (String productId in _selectedProductIds) {
-        await productService.deleteProduct(productId).then((result) => {
-              CustomSnackBar.showCustomSnackbar(
-                context,
-                'Selected products deleted successfully!',
-                false,
-              )
-            });
+        await productService.deleteProduct(productId).then((result) => {});
+      }
+      final context = widgetKey.currentContext;
+      if (context != null && context.mounted) {
+        CustomSnackBar.showCustomSnackbar(
+          context,
+          'Selected products deleted successfully!',
+          false,
+        );
       }
       _fetchProducts();
     } catch (e) {

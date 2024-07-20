@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ReviewModel {
-  String reviewId;
-  String userId;
-  String productId;
-  int rating;
-  String comment;
-  Timestamp reviewDate;
+  final String reviewId;
+  final String userId;
+  final String productId;
+  final int rating;
+  final String comment;
+  final Timestamp reviewDate;
 
   ReviewModel({
     required this.reviewId,
@@ -27,5 +27,27 @@ class ReviewModel {
       comment: data['comment'] ?? '',
       reviewDate: data['reviewDate'] ?? Timestamp.now(),
     );
+  }
+
+  factory ReviewModel.fromMap(Map<String, dynamic> map) {
+    return ReviewModel(
+      reviewId: map['reviewId'] ?? '',
+      userId: map['userId'] ?? '',
+      productId: map['productId'] ?? '',
+      rating: map['rating'] ?? 0,
+      comment: map['comment'] ?? '',
+      reviewDate: map['reviewDate'] ?? Timestamp.now(),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'reviewId': reviewId,
+      'userId': userId,
+      'productId': productId,
+      'rating': rating,
+      'comment': comment,
+      'reviewDate': reviewDate,
+    };
   }
 }

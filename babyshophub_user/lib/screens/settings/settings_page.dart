@@ -3,9 +3,9 @@ import 'package:BabyShopHub/theme/theme_extension.dart';
 import 'package:BabyShopHub/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:unicons/unicons.dart';
 
 class SettingsPage extends StatefulWidget {
-
   const SettingsPage({super.key});
 
   @override
@@ -111,13 +111,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     const SizedBox(height: 16),
                     _buildRoundedListItem(
-                        icon: Icons.edit,
-                        title: 'Edit profile',
-                        trailing: const Icon(Icons.chevron_right),
-                        isDarkMode: isDarkMode),
+                      icon: UniconsLine.pen,
+                      title: 'Edit profile',
+                      trailing: const Icon(Icons.chevron_right),
+                      isDarkMode: isDarkMode,
+                    ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
-                      icon: Icons.lock,
+                      icon: UniconsLine.lock,
                       title: 'Change password',
                       trailing: const Icon(Icons.chevron_right),
                       isDarkMode: isDarkMode,
@@ -132,30 +133,34 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     const SizedBox(height: 16),
                     _buildRoundedListItem(
-                        icon: Icons.dark_mode,
-                        title: 'Dark Theme',
-                        trailing: Switch(
-                          value: isDarkMode,
-                          onChanged: (bool value) {
-                            setState(() {
-                              isDarkMode = value;
-                            });
-                            themeProvider.toggleTheme(isDarkMode);
-                          },
-                        ),
-                        isDarkMode: isDarkMode),
+                      icon: UniconsLine.moon,
+                      title: 'Dark Theme',
+                      trailing: Switch(
+                        value: isDarkMode,
+                        onChanged: (bool value) {
+                          setState(() {
+                            isDarkMode = value;
+                          });
+                          themeProvider.toggleTheme(isDarkMode);
+                        },
+                      ),
+                      isDarkMode: isDarkMode,
+                    ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
-                        icon: Icons.info,
-                        title: 'About us',
-                        trailing: const Icon(Icons.chevron_right),
-                        isDarkMode: isDarkMode),
+                      icon: UniconsLine.info_circle,
+                      title: 'About us',
+                      trailing: const Icon(Icons.chevron_right),
+                      isDarkMode: isDarkMode,
+                    ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
-                        icon: Icons.contact_support,
-                        title: 'Contact us',
-                        trailing: const Icon(Icons.chevron_right),
-                        isDarkMode: isDarkMode),
+                      // icon: Icons.contact_support,
+                      icon: UniconsLine.comment_question,
+                      title: 'Contact us',
+                      trailing: const Icon(Icons.chevron_right),
+                      isDarkMode: isDarkMode,
+                    ),
 
                     // *Log out button
                     const SizedBox(height: 48),

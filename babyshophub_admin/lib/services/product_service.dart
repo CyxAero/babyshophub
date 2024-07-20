@@ -85,11 +85,9 @@ class ProductService {
     }
   }
 
-  Future<List<CategoryModel>> getCategories() async {
+  Future<Set<CategoryModel>> getCategories() async {
     QuerySnapshot snapshot = await _categoryCollection.get();
-    return snapshot.docs
-        .map((doc) => CategoryModel.fromFirestore(doc))
-        .toList();
+    return snapshot.docs.map((doc) => CategoryModel.fromFirestore(doc)).toSet();
   }
 
   Future<void> addCategory(CategoryModel category) async {
@@ -97,13 +95,15 @@ class ProductService {
   }
 
   Future<void> updateProductImages(
-      String productId, List<File> newImages) async {
+    String productId,
+    Set<File> newImages,
+  ) async {
     // Fetch existing product
     DocumentSnapshot doc = await _productCollection.doc(productId).get();
     ProductModel product = ProductModel.fromFirestore(doc);
 
     // Upload new images and get their URLs
-    List<String> newImageUrls = [];
+    Set<String> newImageUrls = {};
     for (File image in newImages) {
       String imageUrl = await uploadImage(image);
       newImageUrls.add(imageUrl);

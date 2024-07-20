@@ -62,33 +62,44 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       // *Title and Rating
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.product.name,
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              Text(
-                                _calculateAverageRating(widget.product.reviews)
-                                    .toStringAsFixed(1),
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              const Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                                size: 18,
-                              ),
-                              Text(
-                                ' (${widget.product.reviews.length} ratings)',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ],
-                          ),
-                        ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.product.name,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium
+                                  ?.copyWith(
+                                    height: 1,
+                                  ),
+                              maxLines: 3,
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Text(
+                                  _calculateAverageRating(
+                                          widget.product.reviews)
+                                      .toStringAsFixed(1),
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                                const Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                  size: 18,
+                                ),
+                                Text(
+                                  ' (${widget.product.reviews.length} ratings)',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
 
                       // *Price
@@ -122,7 +133,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   }
 
   // MARK: IMAGE CAROUSEL
-  Widget _buildImageCarousel(List<String> images) {
+  Widget _buildImageCarousel(Set<String> images) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
       child: Container(
@@ -144,7 +155,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(24),
                       child: Image.network(
-                        images[index],
+                        images.elementAt(index),
                         fit: BoxFit.cover,
                       ),
                     ),
