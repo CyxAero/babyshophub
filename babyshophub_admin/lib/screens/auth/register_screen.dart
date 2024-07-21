@@ -153,10 +153,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           TextFormField(
             controller: _usernameController,
             keyboardType: TextInputType.name,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Username",
               hintText: "JSmith",
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -170,10 +172,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: _emailController,
             focusNode: _emailFocusNode,
             keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Email",
               hintText: "johnsmith@gmail.com",
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -187,9 +191,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: _passwordController,
             focusNode: _passwordFocusNode,
             keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Password",
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
             ),
             obscureText: true,
             validator: (value) {
@@ -205,7 +211,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
               labelText: "Confirm Password",
-              border: const OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
               errorText: !_passwordsMatch ? 'Passwords do not match' : null,
             ),
             obscureText: true,
@@ -280,7 +288,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     }
                   : null,
               child: Text(
-                "Sign up",
+                "Register",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
@@ -352,16 +360,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     );
                     CustomSnackBar.showCustomSnackbar(
                       context,
-                      'Signed in with Google successfully.',
+                      'Logged in with Google successfully.',
                       false,
                     );
                   } else {
-                    throw Exception('Failed to sign in with Google');
+                    throw Exception('Failed to log in with Google');
                   }
                 } catch (e) {
                   CustomSnackBar.showCustomSnackbar(
                     context,
-                    'Failed to sign in with Google. Please try again.',
+                    'Failed to log in with Google. Please try again.',
                     true,
                   );
                 } finally {

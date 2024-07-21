@@ -1,23 +1,22 @@
-import 'package:BabyShopHub/widgets/basic_appbar.dart';
-import 'package:BabyShopHub/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 
-class CartPage extends StatelessWidget {
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
 
-  const CartPage({super.key});
+  @override
+  State<SearchPage> createState() => _SearchPageState();
+}
 
+class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        height: 100,
-        title: "Your Cart",
-      ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
         child: Text(
-          "Nothing here yet",
+          "Search Products",
           style: Theme.of(context).textTheme.displayMedium,
+          textAlign: TextAlign.center,
         ),
       ),
     );

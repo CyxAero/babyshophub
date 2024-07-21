@@ -2,6 +2,7 @@ import 'package:BabyShopHub/theme/theme_extension.dart';
 import 'package:BabyShopHub/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:unicons/unicons.dart';
 
 class CartIcon extends StatelessWidget {
   final Color iconColor;
@@ -19,7 +20,7 @@ class CartIcon extends StatelessWidget {
         IconButton(
           onPressed: onPressed,
           icon: Icon(
-            Icons.shopping_cart_rounded,
+            UniconsLine.shopping_cart,
             color: isDarkMode
                 ? Theme.of(context).colorScheme.white1
                 : Theme.of(context).colorScheme.black1,

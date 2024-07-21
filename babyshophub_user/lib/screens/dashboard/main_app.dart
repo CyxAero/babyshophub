@@ -1,15 +1,12 @@
-import 'package:BabyShopHub/models/user_model.dart';
 import 'package:BabyShopHub/screens/cart/cart_page.dart';
-import 'package:BabyShopHub/screens/dashboard/dashboard_page.dart';
 import 'package:BabyShopHub/screens/saved/saved_products_page.dart';
 import 'package:BabyShopHub/screens/settings/settings_page.dart';
 import 'package:BabyShopHub/screens/shop/shop_page.dart';
 import 'package:flutter/material.dart';
+import 'package:unicons/unicons.dart';
 
 class MainApp extends StatefulWidget {
-  final UserModel user;
-
-  const MainApp({super.key, required this.user});
+  const MainApp({super.key});
 
   @override
   State<MainApp> createState() => _MainAppState();
@@ -24,11 +21,10 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     super.initState();
     pages.addAll([
-      DashboardPage(user: widget.user),
-      ShopPage(user: widget.user),
-      // CartPage(user: widget.user),
-      SavedProductsPage(user: widget.user),
-      SettingsPage(user: widget.user),
+      const ShopPage(),
+      const SavedProductsPage(),
+      const CartPage(),
+      const SettingsPage(),
     ]);
   }
 
@@ -48,7 +44,7 @@ class _MainAppState extends State<MainApp> {
         child: NavigationBar(
           backgroundColor: Theme.of(context).colorScheme.surface,
           indicatorColor: Theme.of(context).colorScheme.primary,
-          height: 100,
+          height: 80,
           selectedIndex: _currentPage,
           labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           animationDuration: const Duration(seconds: 1),
@@ -59,28 +55,20 @@ class _MainAppState extends State<MainApp> {
           },
           destinations: const [
             NavigationDestination(
-              icon: Icon(Icons.dashboard_outlined),
-              selectedIcon: Icon(Icons.dashboard_rounded),
-              label: 'Dashboard',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.shopping_bag_outlined),
-              selectedIcon: Icon(Icons.shopping_bag_rounded),
+              icon: Icon(UniconsLine.shopping_bag),
               label: 'Shop',
             ),
-            // NavigationDestination(
-            //   icon: Icon(Icons.shopping_cart_outlined),
-            //   selectedIcon: Icon(Icons.shopping_cart_rounded),
-            //   label: 'Cart',
-            // ),
             NavigationDestination(
-              icon: Icon(Icons.saved_search_outlined),
-              selectedIcon: Icon(Icons.saved_search_rounded),
+              icon: Icon(UniconsLine.bookmark),
+              selectedIcon: Icon(UniconsSolid.bookmark),
               label: 'Saved',
             ),
             NavigationDestination(
-              icon: Icon(Icons.settings_outlined),
-              selectedIcon: Icon(Icons.settings_rounded),
+              icon: Icon(UniconsLine.shopping_cart),
+              label: 'Cart',
+            ),
+            NavigationDestination(
+              icon: Icon(UniconsLine.setting),
               label: 'Settings',
             ),
           ],

@@ -18,11 +18,12 @@ class CustomSnackBar {
       elevation: 0,
       content: Text(
         message,
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: isDarkTheme
                   ? Theme.of(context).colorScheme.black1
                   : Theme.of(context).colorScheme.white1,
             ),
+        textAlign: TextAlign.center,
       ),
       behavior: SnackBarBehavior.floating,
       backgroundColor: backgroundColor,

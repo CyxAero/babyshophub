@@ -1,6 +1,6 @@
 import 'package:babyshophub_admin/models/product_model.dart';
 import 'package:babyshophub_admin/screens/products/add_product_sheet.dart';
-import 'package:babyshophub_admin/screens/products/test.dart';
+import 'package:babyshophub_admin/screens/products/product_details_page.dart';
 import 'package:babyshophub_admin/services/product_service.dart';
 import 'package:babyshophub_admin/widgets/custom_snackbar.dart';
 import 'package:babyshophub_admin/widgets/product_card.dart';
@@ -16,6 +16,7 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   late Future<List<ProductModel>> _productsFuture;
   final List<String> _selectedProductIds = [];
+  final GlobalKey<_ProductsPageState> widgetKey = GlobalKey();
 
   @override
   void initState() {
@@ -169,7 +170,7 @@ class _ProductsPageState extends State<ProductsPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ProductDetailsPageNew(
+                          builder: (context) => ProductDetailsPage(
                             product: product,
                           ),
                         ),
@@ -185,7 +186,7 @@ class _ProductsPageState extends State<ProductsPage> {
                         name: product.name,
                         price: '\$${product.price.toStringAsFixed(2)}',
                         imageUrl: product.images.isNotEmpty
-                            ? product.images[0]
+                            ? product.images.elementAt(0)
                             : 'assets/images/placeholder.png',
                       ),
                       if (isSelected)
@@ -194,8 +195,10 @@ class _ProductsPageState extends State<ProductsPage> {
                           left: 8,
                           child: CircleAvatar(
                             backgroundColor: Colors.white,
-                            child: Icon(Icons.check_circle,
-                                color: Theme.of(context).colorScheme.primary),
+                            child: Icon(
+                              Icons.check_circle,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
                         ),
                     ],
@@ -210,6 +213,7 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
+  // MARK: Product Bottom Sheet
   void _showAddProductBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -225,13 +229,14 @@ class _ProductsPageState extends State<ProductsPage> {
       showDragHandle: true,
       builder: (context) => FractionallySizedBox(
         heightFactor: 0.8,
-        child: AddProductBottomSheet(
+        child: ProductBottomSheet(
           onProductAdded: _fetchProducts,
         ),
       ),
     );
   }
 
+  // MARK: Toggle Selection
   void _toggleSelection(String productId) {
     setState(() {
       if (_selectedProductIds.contains(productId)) {
@@ -242,6 +247,7 @@ class _ProductsPageState extends State<ProductsPage> {
     });
   }
 
+  // MARK: Confirm Delete
   void _confirmDelete() {
     showDialog(
       context: context,
@@ -277,25 +283,32 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
+  // MARK: Delete Products
   Future<void> _deleteSelectedProducts() async {
     final productService = ProductService();
 
     try {
       for (String productId in _selectedProductIds) {
-        await productService.deleteProduct(productId);
+        await productService.deleteProduct(productId).then((result) => {});
       }
-      CustomSnackBar.showCustomSnackbar(
-        context,
-        'Selected products deleted successfully!',
-        false,
-      );
+      final context = widgetKey.currentContext;
+      if (context != null && context.mounted) {
+        CustomSnackBar.showCustomSnackbar(
+          context,
+          'Selected products deleted successfully!',
+          false,
+        );
+      }
       _fetchProducts();
     } catch (e) {
-      CustomSnackBar.showCustomSnackbar(
-        context,
-        'Failed to delete selected products. Please try again.',
-        true,
-      );
+      final context = widgetKey.currentContext;
+      if (context != null && context.mounted) {
+        CustomSnackBar.showCustomSnackbar(
+          context,
+          'Failed to delete selected products. Please try again.',
+          true,
+        );
+      }
     }
     setState(() {
       _selectedProductIds.clear();

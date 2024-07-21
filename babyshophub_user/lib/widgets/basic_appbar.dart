@@ -22,7 +22,7 @@ class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
         },
       ),
       title: Text(
-        title!,
+        title ?? "",
         style: Theme.of(context).textTheme.displaySmall?.copyWith(
               fontWeight: FontWeight.w700,
               fontSize: 24,
@@ -30,6 +30,7 @@ class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
         maxLines: 2,
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
+      surfaceTintColor: Theme.of(context).colorScheme.surface,
       elevation: 0,
     );
   }

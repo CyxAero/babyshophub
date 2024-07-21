@@ -2,6 +2,7 @@ import 'package:babyshophub_admin/models/review_model.dart';
 import 'package:babyshophub_admin/models/user_model.dart';
 import 'package:babyshophub_admin/services/review_service.dart';
 import 'package:babyshophub_admin/services/user_service.dart';
+import 'package:babyshophub_admin/theme/theme_extension.dart';
 import 'package:babyshophub_admin/widgets/basic_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,6 @@ class RatingsAndReviewsPage extends StatefulWidget {
 }
 
 class _RatingsAndReviewsPageState extends State<RatingsAndReviewsPage> {
-
   List<ReviewModel> reviews = [];
   Map<String, UserModel> reviewUsers = {};
   Set<String> selectedReviews = {};
@@ -41,6 +41,7 @@ class _RatingsAndReviewsPageState extends State<RatingsAndReviewsPage> {
         }
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to load reviews: $e')),
       );
@@ -60,14 +61,16 @@ class _RatingsAndReviewsPageState extends State<RatingsAndReviewsPage> {
 
   Future<void> _deleteSelectedReviews() async {
     final reviewService = Provider.of<ReviewService>(context, listen: false);
+    
     try {
       for (String reviewId in selectedReviews) {
         await reviewService.deleteReview(reviewId);
       }
       await _loadReviews();
       selectedReviews.clear();
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Selected reviews deleted successfully')),
+        const SnackBar(content: Text('Selected reviews deleted successfully')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -75,7 +78,6 @@ class _RatingsAndReviewsPageState extends State<RatingsAndReviewsPage> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +104,7 @@ class _RatingsAndReviewsPageState extends State<RatingsAndReviewsPage> {
 
   Widget _buildRatingSummary(double averageRating) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       color: Colors.grey[200],
       child: Row(
         children: [
@@ -113,16 +115,15 @@ class _RatingsAndReviewsPageState extends State<RatingsAndReviewsPage> {
               children: [
                 Text(
                   'Average rating',
-                  style: TextStyle(fontSize: 16),
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
                 Row(
                   children: [
                     Text(
                       averageRating.toStringAsFixed(1),
-                      style:
-                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    Icon(Icons.star, color: Colors.amber),
+                    const Icon(Icons.star, color: Colors.amber),
                   ],
                 ),
                 Text('${reviews.length} ratings'),
@@ -141,12 +142,13 @@ class _RatingsAndReviewsPageState extends State<RatingsAndReviewsPage> {
                 return Row(
                   children: [
                     Text('$starCount'),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: LinearProgressIndicator(
                         value: percentage,
                         backgroundColor: Colors.grey[300],
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.amber),
+                        valueColor:
+                            const AlwaysStoppedAnimation<Color>(Colors.amber),
                       ),
                     ),
                   ],
@@ -183,9 +185,9 @@ class _RatingsAndReviewsPageState extends State<RatingsAndReviewsPage> {
               title: Row(
                 children: [
                   Text(user?.username ?? 'Anonymous'),
-                  Spacer(),
+                  const Spacer(),
                   Text('${review.rating}'),
-                  Icon(Icons.star, color: Colors.amber, size: 16),
+                  const Icon(Icons.star, color: Colors.amber, size: 16),
                 ],
               ),
               subtitle: Text(review.comment),
@@ -199,16 +201,19 @@ class _RatingsAndReviewsPageState extends State<RatingsAndReviewsPage> {
   Widget _buildDeleteButton() {
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
           onPressed: selectedReviews.isNotEmpty ? _deleteSelectedReviews : null,
-          child: Text('Delete'),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.red,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            elevation: 0,
           ),
+          child: const Text('Delete'),
         ),
       ),
     );
   }
 }
+
+// https://console.firebase.google.com/vl/r/project/babyshophub-afe3b/firestore/indexes?create_composite=ClFwcm9qZWNOcygiYWJ5c2hvcGh1Yi1hZmUzYi9kYXRhYmFzZXMvKGRlZmF1bHQpL2NvbGxlY3Rpb25Hcm9lcHMvcmV2aWV3cY9pbmRleGVzL18QARoNCg1wcm9kdWNoSWOOARoOCgpyZXZpZXdEYXRlEAlaDAoIX19uYW11X180Ag

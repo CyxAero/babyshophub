@@ -1,5 +1,6 @@
 import "dart:io";
 
+import 'package:babyshophub_admin/models/category_model.dart';
 import 'package:babyshophub_admin/models/product_model.dart';
 import 'package:babyshophub_admin/services/review_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +10,8 @@ import 'package:logger/logger.dart';
 class ProductService {
   final CollectionReference _productCollection =
       FirebaseFirestore.instance.collection('products');
+  final CollectionReference _categoryCollection =
+      FirebaseFirestore.instance.collection('categories');
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   Future<void> addProduct(ProductModel product) async {
@@ -80,5 +83,34 @@ class ProductService {
       Logger().e("Image upload error: $e");
       rethrow; // Propagate the error so it can be caught in the calling function
     }
+  }
+
+  Future<Set<CategoryModel>> getCategories() async {
+    QuerySnapshot snapshot = await _categoryCollection.get();
+    return snapshot.docs.map((doc) => CategoryModel.fromFirestore(doc)).toSet();
+  }
+
+  Future<void> addCategory(CategoryModel category) async {
+    await _categoryCollection.add(category.toFirestore());
+  }
+
+  Future<void> updateProductImages(
+    String productId,
+    Set<File> newImages,
+  ) async {
+    // Fetch existing product
+    DocumentSnapshot doc = await _productCollection.doc(productId).get();
+    ProductModel product = ProductModel.fromFirestore(doc);
+
+    // Upload new images and get their URLs
+    Set<String> newImageUrls = {};
+    for (File image in newImages) {
+      String imageUrl = await uploadImage(image);
+      newImageUrls.add(imageUrl);
+    }
+
+    // Update product images in Firestore
+    product.images = newImageUrls;
+    await _productCollection.doc(productId).update(product.toFirestore());
   }
 }

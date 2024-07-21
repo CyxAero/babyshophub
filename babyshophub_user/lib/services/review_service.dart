@@ -1,4 +1,4 @@
-import 'package:babyshophub_admin/models/review_model.dart';
+import 'package:BabyShopHub/models/review_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ReviewService {

@@ -1,5 +1,5 @@
 import 'package:BabyShopHub/screens/getting_started.dart'; 
-import 'package:BabyShopHub/models/user_model.dart';
+import 'package:BabyShopHub/providers/user_provider.dart';
 import 'package:BabyShopHub/screens/settings/change_password.dart';
 import 'package:BabyShopHub/screens/settings/update_profile_screen.dart';
 import 'package:BabyShopHub/theme/theme_extension.dart';
@@ -7,11 +7,10 @@ import 'package:BabyShopHub/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wiredash/wiredash.dart';
+import 'package:unicons/unicons.dart';
 
 class SettingsPage extends StatefulWidget {
-  final UserModel user;
-
-  const SettingsPage({super.key, required this.user});
+  const SettingsPage({super.key});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -22,6 +21,8 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     bool isDarkMode = themeProvider.themeMode == ThemeMode.dark;
+
+    final user = Provider.of<UserProvider>(context).user;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -79,7 +80,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         child: Center(
                           child: Text(
-                            widget.user.username!.substring(0, 2).toUpperCase(),
+                            user?.username?.substring(0, 2).toUpperCase() ??
+                                '??',
                             style: Theme.of(context).textTheme.headlineLarge,
                           ),
                         ),
@@ -88,7 +90,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     const SizedBox(height: 8),
                     Center(
                       child: Text(
-                        widget.user.username ?? "Unknown",
+                        user?.username ?? "Unknown",
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -97,7 +99,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     Center(
                       child: Text(
-                        widget.user.email,
+                        user?.email ?? 'Unknown',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -113,10 +115,11 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     const SizedBox(height: 16),
                     _buildRoundedListItem(
-                        icon: Icons.edit,
-                        title: 'Edit profile',
-                        trailing: const Icon(Icons.chevron_right),
-                        isDarkMode: isDarkMode,
+                      icon: UniconsLine.pen,
+                      title: 'Edit profile',
+                      trailing: const Icon(Icons.chevron_right),
+                      isDarkMode: isDarkMode,
+                    ,
                         onTap: () {
                         Navigator.push(
                           context,
@@ -129,7 +132,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
-                      icon: Icons.lock,
+                      icon: UniconsLine.lock,
                       title: 'Change password',
                       trailing: const Icon(Icons.chevron_right),
                       isDarkMode: isDarkMode,
@@ -153,34 +156,38 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     const SizedBox(height: 16),
                     _buildRoundedListItem(
-                        icon: Icons.dark_mode,
-                        title: 'Dark Theme',
-                        trailing: Switch(
-                          value: isDarkMode,
-                          onChanged: (bool value) {
-                            setState(() {
-                              isDarkMode = value;
-                            });
-                            themeProvider.toggleTheme(isDarkMode);
-                          },
-                        ),
-                        isDarkMode: isDarkMode),
+                      icon: UniconsLine.moon,
+                      title: 'Dark Theme',
+                      trailing: Switch(
+                        value: isDarkMode,
+                        onChanged: (bool value) {
+                          setState(() {
+                            isDarkMode = value;
+                          });
+                          themeProvider.toggleTheme(isDarkMode);
+                        },
+                      ),
+                      isDarkMode: isDarkMode,
+                    ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
-                        icon: Icons.info,
-                        title: 'About us',
-                        trailing: const Icon(Icons.chevron_right),
-                        isDarkMode: isDarkMode,
+                      icon: UniconsLine.info_circle,
+                      title: 'About us',
+                      trailing: const Icon(Icons.chevron_right),
+                      isDarkMode: isDarkMode,
+                    ,
                          onTap: () {
                           _showDialog(context);
                         }
                         ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
-                        icon: Icons.contact_support,
-                        title: 'Feedback and Support',
-                        trailing: const Icon(Icons.chevron_right),
-                        isDarkMode: isDarkMode,
+                      // icon: Icons.contact_support,
+                      icon: UniconsLine.comment_question,
+                      title: 'Feedback and Support',
+                      trailing: const Icon(Icons.chevron_right),
+                      isDarkMode: isDarkMode,
+                    ,
                         onTap: () {
                         Wiredash.of(context).show(inheritMaterialTheme: true);
                       },

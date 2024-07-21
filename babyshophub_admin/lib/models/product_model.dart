@@ -6,8 +6,8 @@ class ProductModel {
   String name;
   String description;
   double price;
-  List<String> images;
-  List<String> categories;
+  Set<String> images;
+  Set<String> categories;
   int stock;
   List<ReviewModel> reviews;
 
@@ -29,8 +29,8 @@ class ProductModel {
       name: data['name'] ?? '',
       description: data['description'] ?? '',
       price: (data['price'] as num).toDouble(),
-      images: List<String>.from(data['images'] ?? []),
-      categories: List<String>.from(data['categories'] ?? []),
+      images: Set<String>.from(data['images'] ?? []),
+      categories: Set<String>.from(data['categories'] ?? []),
       stock: data['stock'] ?? 0,
       reviews: (data['reviews'] as List<dynamic>?)
               ?.map((e) => ReviewModel.fromMap(e))

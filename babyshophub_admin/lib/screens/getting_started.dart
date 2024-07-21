@@ -45,7 +45,7 @@ class GettingStarted extends StatelessWidget {
                           ),
                     ),
                     const SizedBox(height: 12),
-                    // * Sign up button
+                    // * Register button
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -66,7 +66,9 @@ class GettingStarted extends StatelessWidget {
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 8),
+                    
                     // *Log in button
                     SizedBox(
                       width: double.infinity,
