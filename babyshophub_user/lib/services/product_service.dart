@@ -14,6 +14,9 @@ class ProductService {
       FirebaseFirestore.instance.collection('categories');
   final FirebaseStorage storage = FirebaseStorage.instance;
 
+  List<ProductModel>? _cachedProducts;
+  List<CategoryModel>? _cachedCategories;
+
   Future<void> addProduct(ProductModel product) async {
     await _productCollection.add(product.toFirestore());
   }
@@ -60,9 +63,20 @@ class ProductService {
     }
   }
 
-  Future<List<ProductModel>> getProducts() async {
+  // Future<List<ProductModel>> getProducts() async {
+  //   QuerySnapshot snapshot = await _productCollection.get();
+  //   return snapshot.docs.map((doc) => ProductModel.fromFirestore(doc)).toList();
+  // }
+
+  Future<List<ProductModel>> getProducts({bool forceRefresh = false}) async {
+    if (_cachedProducts != null && !forceRefresh) {
+      return _cachedProducts!;
+    }
+
     QuerySnapshot snapshot = await _productCollection.get();
-    return snapshot.docs.map((doc) => ProductModel.fromFirestore(doc)).toList();
+    _cachedProducts =
+        snapshot.docs.map((doc) => ProductModel.fromFirestore(doc)).toList();
+    return _cachedProducts!;
   }
 
   Future<ProductModel> getProductById(String productId) async {
@@ -85,11 +99,22 @@ class ProductService {
     }
   }
 
-  Future<List<CategoryModel>> getCategories() async {
+  // Future<List<CategoryModel>> getCategories() async {
+  //   QuerySnapshot snapshot = await _categoryCollection.get();
+  //   return snapshot.docs
+  //       .map((doc) => CategoryModel.fromFirestore(doc))
+  //       .toList();
+  // }
+
+  Future<List<CategoryModel>> getCategories({bool forceRefresh = false}) async {
+    if (_cachedCategories != null && !forceRefresh) {
+      return _cachedCategories!;
+    }
+
     QuerySnapshot snapshot = await _categoryCollection.get();
-    return snapshot.docs
-        .map((doc) => CategoryModel.fromFirestore(doc))
-        .toList();
+    _cachedCategories =
+        snapshot.docs.map((doc) => CategoryModel.fromFirestore(doc)).toList();
+    return _cachedCategories!;
   }
 
   Future<void> addCategory(CategoryModel category) async {

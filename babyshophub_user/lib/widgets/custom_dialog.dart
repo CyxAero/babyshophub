@@ -1,3 +1,4 @@
+import 'package:BabyShopHub/theme/theme_extension.dart';
 import 'package:flutter/material.dart';
 
 class CustomDialog extends StatelessWidget {
@@ -33,7 +34,7 @@ class CustomDialog extends StatelessWidget {
           },
           child: Text(
             confirmText,
-            style: const TextStyle(color: Colors.red),
+            style: TextStyle(color: Theme.of(context).colorScheme.red),
           ),
         ),
       ],

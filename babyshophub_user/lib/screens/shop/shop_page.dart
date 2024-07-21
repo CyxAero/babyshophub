@@ -2,8 +2,10 @@ import 'package:BabyShopHub/models/category_model.dart';
 import 'package:BabyShopHub/models/product_model.dart';
 import 'package:BabyShopHub/screens/shop/product_card.dart';
 import 'package:BabyShopHub/screens/shop/product_details_page.dart';
+import 'package:BabyShopHub/screens/shop/search_page.dart';
 import 'package:BabyShopHub/services/product_service.dart';
 import 'package:flutter/material.dart';
+import 'package:unicons/unicons.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -18,6 +20,8 @@ class _ShopPageState extends State<ShopPage> {
   List<CategoryModel> _categories = [];
   String? _selectedCategory;
 
+  bool _isLoading = true;
+
   @override
   void initState() {
     super.initState();
@@ -25,16 +29,25 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   Future<void> _loadData() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     final products = await _productService.getProducts();
     final categories = await _productService.getCategories();
+
     setState(() {
       _products = products;
       _categories = categories;
+      _selectedCategory = 'All';
+      _isLoading = false;
     });
   }
 
   List<ProductModel> get _filteredProducts {
-    if (_selectedCategory == null) return _products;
+    if (_selectedCategory == 'All' || _selectedCategory == null) {
+      return _products;
+    }
     return _products
         .where((product) => product.categories.contains(_selectedCategory))
         .toList();
@@ -44,18 +57,39 @@ class _ShopPageState extends State<ShopPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SearchPage(),
+            ),
+          );
+        },
+        child: const Icon(
+          UniconsLine.search,
+          size: 32,
+        ),
+      ),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
+            automaticallyImplyLeading: false,
             expandedHeight: 200.0,
             floating: false,
             pinned: true,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            surfaceTintColor: Theme.of(context).colorScheme.surface,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text('Our Products',
-                  style: Theme.of(context).textTheme.headlineMedium),
-              background: Image.asset(
-                'assets/images/shop_banner.jpg',
-                fit: BoxFit.cover,
+              titlePadding: const EdgeInsets.fromLTRB(16, 0, 0, 16),
+              title: Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  'Our Products',
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                ),
               ),
             ),
           ),
@@ -70,10 +104,29 @@ class _ShopPageState extends State<ShopPage> {
               ),
             ),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.all(16.0),
-            sliver: _buildProductGrid(),
+          SliverToBoxAdapter(
+            child: _isLoading
+                ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : const SizedBox.shrink(),
           ),
+          if (!_isLoading)
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 20,
+              ),
+              sliver: _buildProductGrid(),
+            ),
+          // SliverPadding(
+          //   padding:
+          //       const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          //   sliver: _buildProductGrid(),
+          // ),
         ],
       ),
     );
@@ -81,11 +134,11 @@ class _ShopPageState extends State<ShopPage> {
 
   Widget _buildCategoryFilter() {
     return ListView(
+      padding: const EdgeInsets.only(left: 16),
       scrollDirection: Axis.horizontal,
       children: [
         _buildCategoryChip('All'),
-        ..._categories
-            .map((category) => _buildCategoryChip(category.name)),
+        ..._categories.map((category) => _buildCategoryChip(category.name)),
       ],
     );
   }
@@ -94,14 +147,17 @@ class _ShopPageState extends State<ShopPage> {
     final isSelected = _selectedCategory == label;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
-      child: FilterChip(
+      child: ChoiceChip(
         label: Text(label),
         selected: isSelected,
         onSelected: (bool selected) {
           setState(() {
-            _selectedCategory = selected ? label : null;
+            _selectedCategory = selected ? label : 'All';
           });
         },
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100), // Rounded corners
+        ),
       ),
     );
   }
@@ -110,9 +166,9 @@ class _ShopPageState extends State<ShopPage> {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 0.75,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
+        childAspectRatio: 1,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -128,13 +184,7 @@ class _ShopPageState extends State<ShopPage> {
                 ),
               );
             },
-            child: ProductCard(
-              name: product.name,
-              price: '\$${product.price.toStringAsFixed(2)}',
-              imageUrl: product.images.isNotEmpty
-                  ? product.images[0]
-                  : 'assets/images/placeholder.png',
-            ),
+            child: ProductCard(product: product, isInShop: true),
           );
         },
         childCount: _filteredProducts.length,

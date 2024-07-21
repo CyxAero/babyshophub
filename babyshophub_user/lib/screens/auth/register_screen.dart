@@ -413,7 +413,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               )
-            : const Icon(UniconsLine.google, size: 32),
+            : const Padding(
+                padding: EdgeInsets.symmetric(vertical: 4),
+                child: Icon(UniconsLine.google, size: 32),
+              ),
         label: const Text(""),
       ),
     );
