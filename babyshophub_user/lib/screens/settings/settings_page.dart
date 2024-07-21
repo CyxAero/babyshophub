@@ -20,7 +20,6 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    bool isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
     final user = Provider.of<UserProvider>(context).user;
 
@@ -115,10 +114,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     const SizedBox(height: 16),
                     _buildRoundedListItem(
+                      context: context,
                       icon: UniconsLine.pen,
                       title: 'Edit profile',
                       trailing: const Icon(Icons.chevron_right),
-                      isDarkMode: isDarkMode,
                     ,
                         onTap: () {
                         Navigator.push(
@@ -132,10 +131,10 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
+                      context: context,
                       icon: UniconsLine.lock,
                       title: 'Change password',
                       trailing: const Icon(Icons.chevron_right),
-                      isDarkMode: isDarkMode,
                       onTap: () {
                         Navigator.push(
                           context,
@@ -156,25 +155,22 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     const SizedBox(height: 16),
                     _buildRoundedListItem(
+                      context: context,
                       icon: UniconsLine.moon,
                       title: 'Dark Theme',
                       trailing: Switch(
-                        value: isDarkMode,
+                        value: themeProvider.isDarkMode,
                         onChanged: (bool value) {
-                          setState(() {
-                            isDarkMode = value;
-                          });
-                          themeProvider.toggleTheme(isDarkMode);
+                          themeProvider.toggleTheme(value);
                         },
                       ),
-                      isDarkMode: isDarkMode,
                     ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
+                      context: context,
                       icon: UniconsLine.info_circle,
                       title: 'About us',
                       trailing: const Icon(Icons.chevron_right),
-                      isDarkMode: isDarkMode,
                     ,
                          onTap: () {
                           _showDialog(context);
@@ -182,11 +178,11 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
+                      context: context,
                       // icon: Icons.contact_support,
                       icon: UniconsLine.comment_question,
                       title: 'Feedback and Support',
                       trailing: const Icon(Icons.chevron_right),
-                      isDarkMode: isDarkMode,
                     ,
                         onTap: () {
                         Wiredash.of(context).show(inheritMaterialTheme: true);
@@ -230,12 +226,13 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildRoundedListItem({
+    required BuildContext context,
     required IconData icon,
     required String title,
     required Widget trailing,
-    required bool isDarkMode,
     VoidCallback? onTap,
   }) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
         color: isDarkMode

@@ -31,6 +31,7 @@ class GettingStarted extends StatelessWidget {
                       style:
                           Theme.of(context).textTheme.displayMedium?.copyWith(
                                 fontSize: 40,
+                                color: Theme.of(context).colorScheme.black2,
                               ),
                     ),
                   ),

@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
-
     final UserModel user;
 
     const SettingsPage({super.key, required this.user});
@@ -24,7 +23,6 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    bool isDarkMode = themeProvider.themeMode == ThemeMode.dark;
 
     final user = Provider.of<UserProvider>(context).user;
 
@@ -118,35 +116,18 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     const SizedBox(height: 16),
                     _buildRoundedListItem(
+                      context: context,
                         icon: Icons.edit,
-                      title: 'Edit Profile',
+                        title: 'Edit profile',
                         trailing: const Icon(Icons.chevron_right),
-                      isDarkMode: isDarkMode,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                UpdateProfileScreen(user: widget.user),
-                          ),
-                        );
-                      },
-                    ),
+                 ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
+                      context: context,
                       icon: Icons.lock,
                       title: 'Change Password',
                       trailing: const Icon(Icons.chevron_right),
-                      isDarkMode: isDarkMode,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ChangePassword(user: widget.user),
-                          ),
-                        );
-                      },
+
                     ),
 
                     const SizedBox(height: 32),
@@ -158,40 +139,37 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     const SizedBox(height: 16),
                     _buildRoundedListItem(
-                        icon: Icons.dark_mode,
-                        title: 'Dark Theme',
-                        trailing: Switch(
-                          value: isDarkMode,
-                          onChanged: (bool value) {
-                            setState(() {
-                              isDarkMode = value;
-                            });
-                            themeProvider.toggleTheme(isDarkMode);
-                          },
-                        ),
-                        isDarkMode: isDarkMode),
+                      context: context,
+                      icon: Icons.dark_mode,
+                      title: 'Dark Theme',
+                      trailing: Switch(
+                        value: themeProvider.isDarkMode,
+                        onChanged: (bool value) {
+                          themeProvider.toggleTheme(value);
+                        },
+                      ),
+                    ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
-                        icon: Icons.info,
-                        title: 'About Us',
-                        trailing: const Icon(Icons.chevron_right),
-                        isDarkMode: isDarkMode,
+                      context: context,
+                      icon: Icons.info,
+                      title: 'About Us',
+                      trailing: const Icon(Icons.chevron_right)
+                    ,
                         onTap: () {
                           _showDialog(context);
                         }),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
+                      context: context,
+
                         icon: Icons.contact_support,
-                      title: 'Feedback and Support',
+                        title: 'Contact us',
                         trailing: const Icon(Icons.chevron_right),
-                      isDarkMode: isDarkMode,
-                      onTap: () {
-                        Wiredash.of(context).show(inheritMaterialTheme: true);
-                      },
-                    ),
+            ),
 
                     // *Log out button
-                    const SizedBox(height: 48),
+                    const SizedBox(height: 48), 
                     ElevatedButton(
                       onPressed: () {
                         Navigator.pushAndRemoveUntil(
@@ -226,12 +204,13 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildRoundedListItem({
+    required BuildContext context,
     required IconData icon,
     required String title,
     required Widget trailing,
-    required bool isDarkMode,
     VoidCallback? onTap, // Add this parameter
   }) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
         color: isDarkMode

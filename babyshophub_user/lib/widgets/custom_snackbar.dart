@@ -23,6 +23,7 @@ class CustomSnackBar {
                   ? Theme.of(context).colorScheme.black1
                   : Theme.of(context).colorScheme.white1,
             ),
+        textAlign: TextAlign.center,
       ),
       behavior: SnackBarBehavior.floating,
       backgroundColor: backgroundColor,

@@ -2,14 +2,13 @@ import 'dart:io';
 import 'package:babyshophub_admin/models/category_model.dart';
 import 'package:babyshophub_admin/models/product_model.dart';
 import 'package:babyshophub_admin/services/product_service.dart';
-import 'package:babyshophub_admin/theme/theme_provider.dart';
+import 'package:babyshophub_admin/theme/theme_extension.dart';
 import 'package:babyshophub_admin/widgets/custom_snackbar.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
 
 class ImageItem {
   final File? file;
@@ -90,11 +89,6 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
     });
   }
 
-  // bool get _isFormValid =>
-  //     (_formKey.currentState?.validate() ?? false) &&
-  //     _images.isNotEmpty &&
-  //     _selectedCategories.isNotEmpty;
-
   bool get _isFormValid =>
       _isEdited &&
       (_formKey.currentState?.validate() ?? false) &&
@@ -103,9 +97,6 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-    bool isDarkMode = themeProvider.themeMode == ThemeMode.dark;
-
     return Column(
       children: [
         _buildHeader(),
@@ -387,15 +378,12 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
               style: ElevatedButton.styleFrom(
                 elevation: 0,
                 backgroundColor: Theme.of(context).colorScheme.primary,
-                // shape: RoundedRectangleBorder(
-                //   borderRadius: BorderRadius.circular(24),
-                // ),
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
               child: Text(
                 'Save',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.white1,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -427,22 +415,6 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
       _isEdited = true;
     });
   }
-  // Future<void> _addImage() async {
-  //   final ImagePicker picker = ImagePicker();
-  //   final List<XFile> images = await picker.pickMultiImage();
-
-  //   if (images.isNotEmpty) {
-  //     setState(() {
-  //       _images.addAll(images);
-  //     });
-  //   }
-  // }
-
-  // void _removeImage(XFile image) {
-  //   setState(() {
-  //     _images.remove(image);
-  //   });
-  // }
 
   // MARK: Category Management
   void _addCategory(CategoryModel category) {

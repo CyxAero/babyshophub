@@ -1,9 +1,44 @@
+import 'package:BabyShopHub/models/category_model.dart';
+import 'package:BabyShopHub/models/product_model.dart';
 import 'package:BabyShopHub/screens/shop/product_card.dart';
+import 'package:BabyShopHub/screens/shop/product_details_page.dart';
+import 'package:BabyShopHub/services/product_service.dart';
 import 'package:flutter/material.dart';
-import 'package:unicons/unicons.dart';
 
-class ShopPage extends StatelessWidget {
+class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
+
+  @override
+  State<ShopPage> createState() => _ShopPageState();
+}
+
+class _ShopPageState extends State<ShopPage> {
+  final ProductService _productService = ProductService();
+  List<ProductModel> _products = [];
+  List<CategoryModel> _categories = [];
+  String? _selectedCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    final products = await _productService.getProducts();
+    final categories = await _productService.getCategories();
+    setState(() {
+      _products = products;
+      _categories = categories;
+    });
+  }
+
+  List<ProductModel> get _filteredProducts {
+    if (_selectedCategory == null) return _products;
+    return _products
+        .where((product) => product.categories.contains(_selectedCategory))
+        .toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,17 +47,15 @@ class ShopPage extends StatelessWidget {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            automaticallyImplyLeading: false,
-            expandedHeight: 100.0,
+            expandedHeight: 200.0,
             floating: false,
-            // pinned: true,
-            backgroundColor: Theme.of(context).colorScheme.surface,
+            pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                'Our Products',
-                style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      fontSize: 28,
-                    ),
+              title: Text('Our Products',
+                  style: Theme.of(context).textTheme.headlineMedium),
+              background: Image.asset(
+                'assets/images/shop_banner.jpg',
+                fit: BoxFit.cover,
               ),
             ),
           ),
@@ -33,88 +66,78 @@ class ShopPage extends StatelessWidget {
               maxHeight: 60.0,
               child: Container(
                 color: Theme.of(context).colorScheme.surface,
-                child: Row(
-                  children: <Widget>[
-                    IconButton(
-                      icon: const Icon(UniconsLine.search),
-                      onPressed: () {
-                        // Implement search functionality
-                      },
-                    ),
-                    Expanded(
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: <Widget>[
-                          _buildCategoryChip('Electronics'),
-                          _buildCategoryChip('Food'),
-                          _buildCategoryChip('Furniture'),
-                          _buildCategoryChip('Gear'),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                child: _buildCategoryFilter(),
               ),
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 24,
-              horizontal: 16,
-            ),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 1,
-                crossAxisSpacing: 2,
-                mainAxisSpacing: 2,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  final product = products[index];
-                  return ProductCard(
-                    name: product.name,
-                    price: '\$${product.price.toStringAsFixed(2)}',
-                    imageUrl: product.images.isNotEmpty
-                        ? product.images[0]
-                        : 'assets/images/placeholder.png',
-                  );
-                },
-                childCount: products.length,
-              ),
-            ),
+            padding: const EdgeInsets.all(16.0),
+            sliver: _buildProductGrid(),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildCategoryFilter() {
+    return ListView(
+      scrollDirection: Axis.horizontal,
+      children: [
+        _buildCategoryChip('All'),
+        ..._categories
+            .map((category) => _buildCategoryChip(category.name)),
+      ],
     );
   }
 
   Widget _buildCategoryChip(String label) {
+    final isSelected = _selectedCategory == label;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
-      child: Chip(
+      child: FilterChip(
         label: Text(label),
-        backgroundColor: Colors.grey[300],
+        selected: isSelected,
+        onSelected: (bool selected) {
+          setState(() {
+            _selectedCategory = selected ? label : null;
+          });
+        },
       ),
     );
   }
 
-  Widget _buildProductCard() {
-    return Card(
-      color: const Color(0xFF8BA89A), // Sage green color
-      child: Stack(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.topRight,
-            child: IconButton(
-              icon: const Icon(Icons.favorite_border),
-              onPressed: () {
-                // Implement favorite functionality
-              },
+  Widget _buildProductGrid() {
+    return SliverGrid(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.75,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          final product = _filteredProducts[index];
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductDetailsPage(
+                    product: product,
+                  ),
+                ),
+              );
+            },
+            child: ProductCard(
+              name: product.name,
+              price: '\$${product.price.toStringAsFixed(2)}',
+              imageUrl: product.images.isNotEmpty
+                  ? product.images[0]
+                  : 'assets/images/placeholder.png',
             ),
-          ),
-          // Add product image and details here
-        ],
+          );
+        },
+        childCount: _filteredProducts.length,
       ),
     );
   }
