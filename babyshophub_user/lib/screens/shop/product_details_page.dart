@@ -19,17 +19,35 @@ class ProductDetailsPage extends StatefulWidget {
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   final PageController _pageController = PageController();
+  final ReviewService _reviewService = ReviewService();
   int amount = 1;
+  List<ReviewModel> _reviews = [];
+  bool _isLoadingReviews = true;
+  double _averageRating = 0.0;
 
   @override
   void initState() {
     super.initState();
+    _loadReviewsAndRating();
   }
 
-  double _calculateAverageRating(List<ReviewModel> reviews) {
-    if (reviews.isEmpty) return 0.0;
-    final totalRating = reviews.fold(0, (sum, review) => sum + review.rating);
-    return totalRating / reviews.length;
+  Future<void> _loadReviewsAndRating() async {
+    setState(() => _isLoadingReviews = true);
+
+    final reviews = await _reviewService.getReviewsForProduct(
+      widget.product.productId,
+      pageSize: 3,
+    );
+
+    final averageRating = await _reviewService.getAverageRatingForProduct(
+      widget.product.productId,
+    );
+
+    setState(() {
+      _reviews = reviews;
+      _averageRating = averageRating;
+      _isLoadingReviews = false;
+    });
   }
 
   @override
@@ -54,6 +72,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 vertical: 40,
               ),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,9 +99,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             Row(
                               children: [
                                 Text(
-                                  _calculateAverageRating(
-                                          widget.product.reviews)
-                                      .toStringAsFixed(1),
+                                  _averageRating.toStringAsFixed(1),
                                   style:
                                       Theme.of(context).textTheme.titleMedium,
                                 ),
@@ -120,7 +138,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   const SizedBox(height: 24),
 
                   // *Reviews Section
-                  _buildReviewsSection(widget.product),
+                  _buildReviewsSection(),
                 ],
               ),
             ),
@@ -131,7 +149,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
-  // MARK: IMAGE CAROUSEL
+  //* MARK: IMAGE CAROUSEL
   Widget _buildImageCarousel(List<String> images) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
@@ -183,54 +201,48 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
-  // MARK: REVIEWS SECTION
-  Widget _buildReviewsSection(ProductModel product) {
+  // *MARK: REVIEWS SECTION
+  Widget _buildReviewsSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Reviews',
-          style: Theme.of(context).textTheme.titleMedium,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Reviews',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RatingsAndReviewsPage(
+                      productId: widget.product.productId,
+                    ),
+                  ),
+                );
+              },
+              child: const Text('See All'),
+            ),
+          ],
         ),
         const SizedBox(height: 8),
-        FutureBuilder<List<ReviewModel>>(
-          future:
-              ReviewService().getReviewsForProduct(product.productId, limit: 3),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Text('No reviews yet');
-            }
-
-            final reviews = snapshot.data!;
-            return Column(
-              children: [
-                ...reviews.map((review) => _buildReviewItem(review)),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RatingsAndReviewsPage(
-                          productId: product.productId,
-                        ),
-                      ),
-                    );
-                  },
-                  child: const Text('See All'),
-                ),
-              ],
-            );
-          },
-        ),
+        if (_isLoadingReviews)
+          const CircularProgressIndicator()
+        else if (_reviews.isEmpty)
+          const Text('No reviews yet')
+        else
+          Column(
+            children:
+                _reviews.map((review) => _buildReviewItem(review)).toList(),
+          ),
       ],
     );
   }
 
-  // MARK: REVIEW ITEM
+  // *MARK: REVIEW ITEM
   Widget _buildReviewItem(ReviewModel review) {
     return GestureDetector(
       child: Container(
@@ -266,7 +278,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
-  // MARK: BOTTOM BUTTONS
+  // *MARK: BOTTOM BUTTONS
   Widget _buildBottomButtons() {
     return Container(
       decoration: BoxDecoration(
@@ -282,6 +294,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         children: [
           Row(
             children: [
+              // *Minus button
               IconButton.filled(
                 style: IconButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.red,
@@ -289,7 +302,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 onPressed: _decreaseAmount,
                 icon: const Icon(UniconsLine.minus),
               ),
+
               const SizedBox(width: 4),
+
+              // *Quantity input
               SizedBox(
                 width: 32,
                 child: Text(
@@ -298,7 +314,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   textAlign: TextAlign.center,
                 ),
               ),
+
               const SizedBox(width: 4),
+
+              // *Add button
               IconButton.filled(
                 style: IconButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.beige,
@@ -309,7 +328,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               ),
             ],
           ),
+
           const SizedBox(width: 16),
+
+          // *Add to Cart Button
           Expanded(
             child: ElevatedButton(
               onPressed: _handleAddToCart,
@@ -325,6 +347,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
+  // *MARK: Handle Add to cart
   void _handleAddToCart() {}
 
   void _decreaseAmount() {
