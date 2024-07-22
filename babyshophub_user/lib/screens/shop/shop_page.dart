@@ -1,10 +1,9 @@
-import 'package:BabyShopHub/models/category_model.dart';
-import 'package:BabyShopHub/models/product_model.dart';
+import 'package:BabyShopHub/providers/product_provider.dart';
 import 'package:BabyShopHub/screens/shop/product_card.dart';
 import 'package:BabyShopHub/screens/shop/product_details_page.dart';
 import 'package:BabyShopHub/screens/shop/search_page.dart';
-import 'package:BabyShopHub/services/product_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
 class ShopPage extends StatefulWidget {
@@ -15,44 +14,15 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
-  final ProductService _productService = ProductService();
-  List<ProductModel> _products = [];
-  List<CategoryModel> _categories = [];
   String? _selectedCategory;
-
-  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _selectedCategory = 'All';
   }
 
-  Future<void> _loadData() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    final products = await _productService.getProducts();
-    final categories = await _productService.getCategories();
-
-    setState(() {
-      _products = products;
-      _categories = categories;
-      _selectedCategory = 'All';
-      _isLoading = false;
-    });
-  }
-
-  List<ProductModel> get _filteredProducts {
-    if (_selectedCategory == 'All' || _selectedCategory == null) {
-      return _products;
-    }
-    return _products
-        .where((product) => product.categories.contains(_selectedCategory))
-        .toList();
-  }
-
+  // *MARK: Build method
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,74 +41,75 @@ class _ShopPageState extends State<ShopPage> {
           size: 32,
         ),
       ),
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            expandedHeight: 200.0,
-            floating: false,
-            pinned: true,
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            surfaceTintColor: Theme.of(context).colorScheme.surface,
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.fromLTRB(16, 0, 0, 16),
-              title: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  'Our Products',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
+      body: Consumer<ProductProvider>(
+        builder: (context, productProvider, child) {
+          return CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                expandedHeight: 200.0,
+                floating: false,
+                pinned: true,
+                backgroundColor: Theme.of(context).colorScheme.surface,
+                surfaceTintColor: Theme.of(context).colorScheme.surface,
+                flexibleSpace: FlexibleSpaceBar(
+                  titlePadding: const EdgeInsets.fromLTRB(16, 0, 0, 16),
+                  title: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      'Our Products',
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.w800,
+                              ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: _SliverAppBarDelegate(
-              minHeight: 60.0,
-              maxHeight: 60.0,
-              child: Container(
-                color: Theme.of(context).colorScheme.surface,
-                child: _buildCategoryFilter(),
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _SliverAppBarDelegate(
+                  minHeight: 60.0,
+                  maxHeight: 60.0,
+                  child: Container(
+                    color: Theme.of(context).colorScheme.surface,
+                    child: _buildCategoryFilter(productProvider),
+                  ),
+                ),
               ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: _isLoading
-                ? const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : const SizedBox.shrink(),
-          ),
-          if (!_isLoading)
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 20,
+              SliverToBoxAdapter(
+                child: productProvider.isLoading
+                    ? const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
               ),
-              sliver: _buildProductGrid(),
-            ),
-          // SliverPadding(
-          //   padding:
-          //       const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          //   sliver: _buildProductGrid(),
-          // ),
-        ],
+              if (!productProvider.isLoading)
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 20,
+                  ),
+                  sliver: _buildProductGrid(productProvider),
+                ),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildCategoryFilter() {
+  Widget _buildCategoryFilter(ProductProvider productProvider) {
     return ListView(
       padding: const EdgeInsets.only(left: 16),
       scrollDirection: Axis.horizontal,
       children: [
         _buildCategoryChip('All'),
-        ..._categories.map((category) => _buildCategoryChip(category.name)),
+        ...productProvider.categories
+            .map((category) => _buildCategoryChip(category.name)),
       ],
     );
   }
@@ -156,13 +127,15 @@ class _ShopPageState extends State<ShopPage> {
           });
         },
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100), // Rounded corners
+          borderRadius: BorderRadius.circular(100),
         ),
       ),
     );
   }
 
-  Widget _buildProductGrid() {
+  Widget _buildProductGrid(ProductProvider productProvider) {
+    final filteredProducts =
+        productProvider.getFilteredProducts(_selectedCategory);
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -172,7 +145,7 @@ class _ShopPageState extends State<ShopPage> {
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          final product = _filteredProducts[index];
+          final product = filteredProducts[index];
           return GestureDetector(
             onTap: () {
               Navigator.push(
@@ -187,12 +160,14 @@ class _ShopPageState extends State<ShopPage> {
             child: ProductCard(product: product, isInShop: true),
           );
         },
-        childCount: _filteredProducts.length,
+        childCount: filteredProducts.length,
       ),
     );
   }
 }
 
+
+// *MARK: AppBar Delegate
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverAppBarDelegate({
     required this.minHeight,

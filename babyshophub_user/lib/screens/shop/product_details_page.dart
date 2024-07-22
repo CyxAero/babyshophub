@@ -1,10 +1,13 @@
 import 'package:BabyShopHub/models/product_model.dart';
 import 'package:BabyShopHub/models/review_model.dart';
+import 'package:BabyShopHub/providers/cart_provider.dart';
 import 'package:BabyShopHub/screens/shop/ratings_and_reviews_page.dart';
 import 'package:BabyShopHub/services/review_service.dart';
 import 'package:BabyShopHub/theme/theme_extension.dart';
 import 'package:BabyShopHub/widgets/basic_appbar.dart';
+import 'package:BabyShopHub/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:unicons/unicons.dart';
 
@@ -49,7 +52,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       _isLoadingReviews = false;
     });
   }
-
 
   // *MARK: Build method
   @override
@@ -282,6 +284,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   // *MARK: BOTTOM BUTTONS
   Widget _buildBottomButtons() {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -312,7 +316,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 width: 32,
                 child: Text(
                   amount.toString(),
-                  style: Theme.of(context).textTheme.labelMedium,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        fontSize: 20,
+                      ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -322,7 +328,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               // *Add button
               IconButton.filled(
                 style: IconButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.beige,
+                  backgroundColor: Theme.of(context).colorScheme.lightGreen,
                 ),
                 color: Theme.of(context).colorScheme.black2,
                 onPressed: _increaseAmount,
@@ -340,8 +346,18 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 elevation: 0,
+                backgroundColor: isDarkMode
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.black2,
               ),
-              child: const Text('Add to cart'),
+              child: Text(
+                'Add to cart',
+                style: TextStyle(
+                  color: isDarkMode
+                      ? Theme.of(context).colorScheme.black1
+                      : Theme.of(context).colorScheme.white1,
+                ),
+              ),
             ),
           ),
         ],
@@ -350,7 +366,15 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   }
 
   // *MARK: Handle Add to cart
-  void _handleAddToCart() {}
+  void _handleAddToCart() {
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    cartProvider.addItem(widget.product, amount);
+    CustomSnackBar.showCustomSnackbar(
+      context,
+      'Product added to cart.',
+      false,
+    );
+  }
 
   void _decreaseAmount() {
     setState(() {

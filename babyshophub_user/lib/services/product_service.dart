@@ -63,11 +63,6 @@ class ProductService {
     }
   }
 
-  // Future<List<ProductModel>> getProducts() async {
-  //   QuerySnapshot snapshot = await _productCollection.get();
-  //   return snapshot.docs.map((doc) => ProductModel.fromFirestore(doc)).toList();
-  // }
-
   Future<List<ProductModel>> getProducts({bool forceRefresh = false}) async {
     if (_cachedProducts != null && !forceRefresh) {
       return _cachedProducts!;
@@ -98,13 +93,6 @@ class ProductService {
       rethrow; // Propagate the error so it can be caught in the calling function
     }
   }
-
-  // Future<List<CategoryModel>> getCategories() async {
-  //   QuerySnapshot snapshot = await _categoryCollection.get();
-  //   return snapshot.docs
-  //       .map((doc) => CategoryModel.fromFirestore(doc))
-  //       .toList();
-  // }
 
   Future<List<CategoryModel>> getCategories({bool forceRefresh = false}) async {
     if (_cachedCategories != null && !forceRefresh) {

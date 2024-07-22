@@ -1,4 +1,6 @@
 import 'package:BabyShopHub/firebase_options.dart';
+import 'package:BabyShopHub/providers/cart_provider.dart';
+import 'package:BabyShopHub/providers/product_provider.dart';
 import 'package:BabyShopHub/providers/user_provider.dart';
 import 'package:BabyShopHub/providers/wishlist_provider.dart';
 import 'package:BabyShopHub/screens/auth/auth_check.dart';
@@ -44,11 +46,13 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<AuthService>(create: (_) => AuthService()),
-        // Provider<ReviewService>(create: (_) => ReviewService()),
         ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
-        ChangeNotifierProvider<WishlistProvider>(create: (_) => WishlistProvider()),
+        ChangeNotifierProvider<WishlistProvider>(
+          create: (_) => WishlistProvider(),
+        ),
+        ChangeNotifierProvider<CartProvider>(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        // ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) {

@@ -1,4 +1,5 @@
 import 'package:BabyShopHub/providers/user_provider.dart';
+import 'package:BabyShopHub/screens/user/addresses_page.dart';
 import 'package:BabyShopHub/theme/theme_extension.dart';
 import 'package:BabyShopHub/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -133,6 +134,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       icon: UniconsLine.location_point,
                       title: 'Addresses',
                       trailing: const Icon(Icons.chevron_right),
+                      handleClick: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AddressesPage(),
+                            ),
+                          );
+                      }
                     ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(

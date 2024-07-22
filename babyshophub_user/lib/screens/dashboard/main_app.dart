@@ -1,8 +1,11 @@
+import 'package:BabyShopHub/providers/cart_provider.dart';
 import 'package:BabyShopHub/screens/cart/cart_page.dart';
 import 'package:BabyShopHub/screens/saved/saved_products_page.dart';
 import 'package:BabyShopHub/screens/settings/settings_page.dart';
 import 'package:BabyShopHub/screens/shop/shop_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:unicons/unicons.dart';
 
 class MainApp extends StatefulWidget {
@@ -41,37 +44,45 @@ class _MainAppState extends State<MainApp> {
             ),
           ),
         ),
-        child: NavigationBar(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          indicatorColor: Theme.of(context).colorScheme.primary,
-          height: 80,
-          selectedIndex: _currentPage,
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-          animationDuration: const Duration(seconds: 1),
-          onDestinationSelected: (index) {
-            setState(() {
-              _currentPage = index;
-            });
-          },
-          destinations: const [
-            NavigationDestination(
-              icon: Icon(UniconsLine.shopping_bag),
-              label: 'Shop',
-            ),
-            NavigationDestination(
-              icon: Icon(UniconsLine.bookmark),
-              selectedIcon: Icon(UniconsSolid.bookmark),
-              label: 'Saved',
-            ),
-            NavigationDestination(
-              icon: Icon(UniconsLine.shopping_cart),
-              label: 'Cart',
-            ),
-            NavigationDestination(
-              icon: Icon(UniconsLine.setting),
-              label: 'Settings',
-            ),
-          ],
+        child: Consumer<CartProvider>(
+          builder: (context, cart, child) => NavigationBar(
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            indicatorColor: Theme.of(context).colorScheme.primary,
+            height: 80,
+            selectedIndex: _currentPage,
+            labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+            animationDuration: const Duration(seconds: 1),
+            onDestinationSelected: (index) {
+              setState(() {
+                _currentPage = index;
+              });
+            },
+            destinations: [
+              const NavigationDestination(
+                icon: Icon(UniconsLine.shopping_bag),
+                label: 'Shop',
+              ),
+              const NavigationDestination(
+                icon: Icon(UniconsLine.bookmark),
+                label: 'Saved',
+              ),
+              NavigationDestination(
+                icon: badges.Badge(
+                  showBadge: cart.itemCount > 0,
+                  badgeContent: Text(
+                    '${cart.itemCount}',
+                    style: const TextStyle(color: Colors.white, fontSize: 10),
+                  ),
+                  child: const Icon(UniconsLine.shopping_cart),
+                ),
+                label: 'Cart',
+              ),
+              const NavigationDestination(
+                icon: Icon(UniconsLine.setting),
+                label: 'Settings',
+              ),
+            ],
+          ),
         ),
       ),
     );
