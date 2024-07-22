@@ -14,7 +14,7 @@ class SavedProductsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: const CustomAppBar(title: "Your saved products", height: 80),
+      appBar: const CustomAppBar(title: "Saved products", height: 60),
       body: Consumer<WishlistProvider>(
         builder: (context, wishlistProvider, child) {
           if (wishlistProvider.savedProducts.isEmpty) {

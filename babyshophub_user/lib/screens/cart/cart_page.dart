@@ -5,56 +5,67 @@ import 'package:BabyShopHub/widgets/custom_appbar.dart';
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
 
+  // *MARK: Build method
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(
-        height: 100,
+        height: 60,
         title: "Your Cart",
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-          child: Column(
-            children: [
-              ListView.separated(
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        side: BorderSide(
-                            color: Theme.of(context).colorScheme.black2),
-                      ),
-                      child: const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Product Name"),
-                          Text("Price: \$10.00"),
-                          SizedBox(height: 8),
-                          Text("Quantity: 1"),
-                          SizedBox(height: 8),
-                          Text("Subtotal: \$10.00"),
-                        ],
-                      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+                child: Column(
+                  children: [
+                    ListView.separated(
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                              side: BorderSide(
+                                color: Theme.of(context).colorScheme.black2,
+                              ),
+                            ),
+                            child: const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Product Name"),
+                                Text("Price: \$10.00"),
+                                SizedBox(height: 8),
+                                Text("Quantity: 1"),
+                                SizedBox(height: 8),
+                                Text("Subtotal: \$10.00"),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const SizedBox(height: 32),
+                      itemCount: 5,
                     ),
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(height: 32),
-                itemCount: 5,
+                    _buildBottomButton(context),
+                  ],
+                ),
               ),
-              _buildBottomButton(context),
-            ],
+            ),
           ),
-        ),
+          _buildBottomButton(context),
+        ],
       ),
       // bottomNavigationBar: _buildBottomButton(context),
     );
   }
 
+  // *MARK: Bottom Button
   Widget _buildBottomButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16, top: 8),

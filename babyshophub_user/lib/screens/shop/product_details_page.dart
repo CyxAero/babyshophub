@@ -50,6 +50,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     });
   }
 
+
+  // *MARK: Build method
   @override
   Widget build(BuildContext context) {
     return Scaffold(

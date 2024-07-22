@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:unicons/unicons.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -23,12 +22,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
         maxLines: 2,
       ),
-      actions: const [
-        Padding(
-          padding: EdgeInsets.only(right: 16),
-          child: Icon(UniconsLine.search),
-        )
-      ],
       backgroundColor: Colors.transparent,
       toolbarHeight: height,
       bottom: PreferredSize(
@@ -49,5 +42,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   // Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-  Size get preferredSize => const Size.fromHeight(100);
+  Size get preferredSize => Size.fromHeight(height);
 }

@@ -13,6 +13,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+
+  // *MARK: Build method
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
@@ -58,6 +60,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
             ),
+
+
             // *BODY OF SETTINGS PAGE
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
@@ -103,6 +107,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                     const SizedBox(height: 48),
 
+                    // MARK: Account
                     // *Account section
                     Text(
                       'Account',
@@ -122,9 +127,31 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: 'Change password',
                       trailing: const Icon(Icons.chevron_right),
                     ),
+                    const SizedBox(height: 12),
+                    _buildRoundedListItem(
+                      context: context,
+                      icon: UniconsLine.location_point,
+                      title: 'Addresses',
+                      trailing: const Icon(Icons.chevron_right),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildRoundedListItem(
+                      context: context,
+                      icon: UniconsLine.card_atm,
+                      title: 'Payment Methods',
+                      trailing: const Icon(Icons.chevron_right),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildRoundedListItem(
+                      context: context,
+                      icon: UniconsLine.package,
+                      title: 'Orders',
+                      trailing: const Icon(Icons.chevron_right),
+                    ),
 
                     const SizedBox(height: 32),
 
+                    // MARK: General
                     // *General section
                     Text(
                       'General',
@@ -186,26 +213,32 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+
+  // *MARK: List Item
   Widget _buildRoundedListItem({
     required BuildContext context,
     required IconData icon,
     required String title,
     required Widget trailing,
+    VoidCallback? handleClick,
   }) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      decoration: BoxDecoration(
-        color: isDarkMode
-            ? Colors.grey[800]!.withOpacity(0.7)
-            : const Color(0xFFF2F7EB),
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListTile(
-          leading: Icon(icon),
-          title: Text(title),
-          trailing: trailing,
+    return GestureDetector(
+      onTap: handleClick,
+      child: Container(
+        decoration: BoxDecoration(
+          color: isDarkMode
+              ? Colors.grey[800]!.withOpacity(0.7)
+              : const Color(0xFFF2F7EB),
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
+            leading: Icon(icon),
+            title: Text(title),
+            trailing: trailing,
+          ),
         ),
       ),
     );
