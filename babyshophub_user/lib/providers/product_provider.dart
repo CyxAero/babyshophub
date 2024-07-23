@@ -2,6 +2,7 @@ import 'package:BabyShopHub/models/category_model.dart';
 import 'package:BabyShopHub/models/product_model.dart';
 import 'package:BabyShopHub/services/product_service.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/web.dart';
 
 class ProductProvider with ChangeNotifier {
   final ProductService _productService = ProductService();
@@ -25,7 +26,7 @@ class ProductProvider with ChangeNotifier {
       _products = await _productService.getProducts();
       _categories = await _productService.getCategories();
     } catch (error) {
-      print('Error loading data: $error');
+      Logger().e('Error loading data: $error');
     }
 
     _isLoading = false;

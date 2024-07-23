@@ -1,11 +1,27 @@
+import 'dart:math';
+
 import 'package:BabyShopHub/models/cart_item_model.dart';
 import 'package:BabyShopHub/services/cart_service.dart';
+import 'package:BabyShopHub/services/product_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:BabyShopHub/models/product_model.dart';
+import 'package:logger/logger.dart';
+
+class MockPaymentService {
+  // Simulate a payment process
+  static Future<bool> processPayment({required double amount}) async {
+    // Simulate network delay
+    await Future.delayed(const Duration(seconds: 2));
+
+    // Simulate a success rate of 100%
+    return Random().nextDouble() < 1;
+  }
+}
 
 class CartProvider with ChangeNotifier {
   Map<String, CartItem> _items = {};
   final CartService _cartService = CartService();
+  final ProductService _productService = ProductService();
   bool _isLoading = false;
 
   CartProvider() {
@@ -80,6 +96,37 @@ class CartProvider with ChangeNotifier {
     }
     await _cartService.saveCart(_items);
     notifyListeners();
+  }
+
+  Future<bool> processPayment() async {
+    try {
+      bool paymentSuccess = await MockPaymentService.processPayment(
+        amount: totalAmount,
+      );
+
+      if (paymentSuccess) {
+        // Payment successful, update product stock
+        await _updateProductStock();
+        // Clear the cart
+        await clear();
+        return true;
+      } else {
+        Logger().e('Payment failed');
+        return false;
+      }
+    } catch (e) {
+      Logger().e('Error processing payment: $e');
+      return false;
+    }
+  }
+
+  Future<void> _updateProductStock() async {
+    for (var item in _items.values) {
+      await _productService.updateProductStock(
+        item.product.productId,
+        item.product.stock - item.quantity,
+      );
+    }
   }
 
   Future<void> clear() async {

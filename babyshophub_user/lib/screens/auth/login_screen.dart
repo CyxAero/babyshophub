@@ -298,7 +298,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     'User logged in with Google.',
                     false,
                   );
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const MainApp(),

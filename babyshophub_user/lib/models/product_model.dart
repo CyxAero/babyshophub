@@ -50,4 +50,28 @@ class ProductModel {
       'reviews': reviews.map((e) => e.toMap()).toList(),
     };
   }
+
+  // Add these new methods
+  Map<String, dynamic> toMap() {
+    return {
+      'productId': productId,
+      ...toFirestore(),
+    };
+  }
+
+  factory ProductModel.fromMap(Map<String, dynamic> map) {
+    return ProductModel(
+      productId: map['productId'],
+      name: map['name'] ?? '',
+      description: map['description'] ?? '',
+      price: (map['price'] as num).toDouble(),
+      images: List<String>.from(map['images'] ?? []),
+      categories: List<String>.from(map['categories'] ?? []),
+      stock: map['stock'] ?? 0,
+      reviews: (map['reviews'] as List<dynamic>?)
+              ?.map((e) => ReviewModel.fromMap(e))
+              .toList() ??
+          [],
+    );
+  }
 }

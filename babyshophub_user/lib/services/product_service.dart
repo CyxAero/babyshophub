@@ -59,7 +59,7 @@ class ProductService {
       }
     } catch (e) {
       Logger().e('Failed to delete product with ID $productId: $e');
-      throw e; // Re-throw the exception to be handled by the caller
+      rethrow; // Re-throw the exception to be handled by the caller
     }
   }
 
@@ -125,5 +125,17 @@ class ProductService {
     // Update product images in Firestore
     product.images = newImageUrls;
     await _productCollection.doc(productId).update(product.toFirestore());
+  }
+
+  Future<void> updateProductStock(
+      String productId, int quantityToReduce) async {
+    try {
+      await _productCollection
+          .doc(productId)
+          .update({'stock': FieldValue.increment(-quantityToReduce)});
+    } catch (e) {
+      Logger().e('Error updating product stock: $e');
+      rethrow;
+    }
   }
 }

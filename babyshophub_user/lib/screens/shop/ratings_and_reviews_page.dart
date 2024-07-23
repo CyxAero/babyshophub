@@ -6,6 +6,7 @@ import 'package:BabyShopHub/services/review_service.dart';
 import 'package:BabyShopHub/services/user_service.dart';
 import 'package:BabyShopHub/theme/theme_extension.dart';
 import 'package:BabyShopHub/widgets/basic_appbar.dart';
+import 'package:BabyShopHub/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +55,6 @@ class _RatingsAndReviewsPageState extends State<RatingsAndReviewsPage> {
         _checkIfUserCanReview(),
       ]);
     } catch (e) {
-      print('Error loading data: $e');
       setState(() {
         _errorMessage = 'Error loading reviews. Please try again later.';
       });
@@ -106,12 +106,11 @@ class _RatingsAndReviewsPageState extends State<RatingsAndReviewsPage> {
         _calculateRatingCounts(_reviews);
       });
     } catch (e) {
-      print('Error loading more reviews: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Error loading more reviews. Please try again.'),
-          ),
+        CustomSnackBar.showCustomSnackbar(
+          context,
+          'Error loading more reviews. Please try again.',
+          true,
         );
       }
     } finally {
@@ -149,6 +148,7 @@ class _RatingsAndReviewsPageState extends State<RatingsAndReviewsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: const BasicAppBar(
         height: 80,
         title: "Ratings & Reviews",
@@ -376,8 +376,7 @@ class _RatingsAndReviewsPageState extends State<RatingsAndReviewsPage> {
       children: [
         Divider(height: 1.5, color: Colors.grey[600]),
         Padding(
-          padding:
-              const EdgeInsets.only(bottom: 16, left: 16, right: 16, top: 8),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
           child: SizedBox(
             width: double.infinity,
             child: ElevatedButton(

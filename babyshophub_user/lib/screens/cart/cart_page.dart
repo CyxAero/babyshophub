@@ -1,5 +1,6 @@
 import 'package:BabyShopHub/models/cart_item_model.dart';
 import 'package:BabyShopHub/providers/cart_provider.dart';
+import 'package:BabyShopHub/screens/cart/checkout_page.dart';
 import 'package:BabyShopHub/theme/theme_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:BabyShopHub/widgets/custom_appbar.dart';
@@ -203,11 +204,17 @@ class CartPage extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                // TODO: Implement checkout logic
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CheckoutPage(),
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 padding: const EdgeInsets.symmetric(vertical: 16),
+                elevation: 0,
               ),
               child: Text(
                 'Checkout',
