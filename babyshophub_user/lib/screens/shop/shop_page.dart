@@ -1,7 +1,7 @@
 import 'package:BabyShopHub/providers/product_provider.dart';
 import 'package:BabyShopHub/screens/shop/product_card.dart';
 import 'package:BabyShopHub/screens/shop/product_details_page.dart';
-import 'package:BabyShopHub/screens/shop/search_page.dart';
+import 'package:BabyShopHub/screens/shop/search_products_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
