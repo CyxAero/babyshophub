@@ -25,8 +25,8 @@ class _MainAppState extends State<MainApp> {
     pages.addAll([
       const DashboardPage(),
       const ProductsPage(),
-      const OrdersPage(),
-      const UsersPage(),
+      // const OrdersPage(),
+      // const UsersPage(),
       const SettingsPage(),
     ]);
   }
@@ -67,16 +67,16 @@ class _MainAppState extends State<MainApp> {
               selectedIcon: Icon(Icons.shopping_bag_rounded),
               label: 'Products',
             ),
-            NavigationDestination(
-              icon: Icon(Icons.receipt_outlined),
-              selectedIcon: Icon(Icons.receipt_rounded),
-              label: 'Orders',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.people_outlined),
-              selectedIcon: Icon(Icons.people_rounded),
-              label: 'Users',
-            ),
+            // NavigationDestination(
+            //   icon: Icon(Icons.receipt_outlined),
+            //   selectedIcon: Icon(Icons.receipt_rounded),
+            //   label: 'Orders',
+            // ),
+            // NavigationDestination(
+            //   icon: Icon(Icons.people_outlined),
+            //   selectedIcon: Icon(Icons.people_rounded),
+            //   label: 'Users',
+            // ),
             NavigationDestination(
               icon: Icon(Icons.settings_outlined),
               selectedIcon: Icon(Icons.settings_rounded),

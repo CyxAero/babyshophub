@@ -1,8 +1,12 @@
 import 'package:babyshophub_admin/providers/user_provider.dart';
+import 'package:babyshophub_admin/screens/getting_started.dart';
+import 'package:babyshophub_admin/screens/users/change_password.dart';
+import 'package:babyshophub_admin/screens/users/edit_profile_page.dart';
 import 'package:babyshophub_admin/theme/theme_extension.dart';
 import 'package:babyshophub_admin/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:unicons/unicons.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -17,6 +21,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     final user = Provider.of<UserProvider>(context).user;
+    final userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -109,14 +114,30 @@ class _SettingsPageState extends State<SettingsPage> {
                     const SizedBox(height: 16),
                     _buildRoundedListItem(
                       context: context,
-                      icon: Icons.edit,
+                      handleClick: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EditProfilePage(),
+                          ),
+                        );
+                      },
+                      icon: UniconsLine.pen,
                       title: 'Edit profile',
                       trailing: const Icon(Icons.chevron_right),
                     ),
                     const SizedBox(height: 12),
                     _buildRoundedListItem(
                       context: context,
-                      icon: Icons.lock,
+                      handleClick: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ChangePassword(),
+                          ),
+                        );
+                      },
+                      icon: UniconsLine.lock,
                       title: 'Change password',
                       trailing: const Icon(Icons.chevron_right),
                     ),
@@ -140,25 +161,20 @@ class _SettingsPageState extends State<SettingsPage> {
                         },
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    _buildRoundedListItem(
-                      context: context,
-                      icon: Icons.info,
-                      title: 'About us',
-                      trailing: const Icon(Icons.chevron_right),
-                    ),
-                    const SizedBox(height: 12),
-                    _buildRoundedListItem(
-                      context: context,
-                      icon: Icons.contact_support,
-                      title: 'Contact us',
-                      trailing: const Icon(Icons.chevron_right),
-                    ),
 
                     // *Log out button
                     const SizedBox(height: 48),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        userProvider.signOut();
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const GettingStarted(),
+                          ),
+                          (route) => false,
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.all(22),
                         elevation: 0,
@@ -188,21 +204,25 @@ class _SettingsPageState extends State<SettingsPage> {
     required IconData icon,
     required String title,
     required Widget trailing,
+    VoidCallback? handleClick,
   }) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      decoration: BoxDecoration(
-        color: isDarkMode
-            ? Colors.grey[800]!.withOpacity(0.7)
-            : const Color(0xFFF2F7EB),
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListTile(
-          leading: Icon(icon),
-          title: Text(title),
-          trailing: trailing,
+    return GestureDetector(
+      onTap: handleClick,
+      child: Container(
+        decoration: BoxDecoration(
+          color: isDarkMode
+              ? Colors.grey[800]!.withOpacity(0.7)
+              : const Color(0xFFF2F7EB),
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
+            leading: Icon(icon),
+            title: Text(title),
+            trailing: trailing,
+          ),
         ),
       ),
     );
